@@ -9,3 +9,7 @@ def hello_world():
 @app.route("/test")
 def test():
     return "<p>Testing New Route</p>"
+
+@app.route("/new")
+def test():
+    return "<p>New Route from VsCode</p>"
