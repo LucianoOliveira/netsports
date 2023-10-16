@@ -11,5 +11,5 @@ def test():
     return "<p>Testing New Route</p>"
 
 @app.route("/new")
-def test():
+def new():
     return "<p>New Route from VsCode</p>"
