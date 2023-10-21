@@ -1,10 +1,10 @@
 from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from os import path
-# from flask_login import LoginManager
+from flask_login import LoginManager
 # from flask_mail import Mail, Message
 
-# db = SQLAlchemy()
+db = SQLAlchemy()
 DB_NAME = "database.db"
 # emailS = Mail()
 
@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'Hello From Hell! :D'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    # db.init_app(app)
+    db.init_app(app)
 
 
     # mail_settings = {
@@ -37,15 +37,14 @@ def create_app():
     from .models import User, Note
 
     with app.app_context():
-        pass
-        # db.create_all()
+        db.create_all()
 
-    # login_manager = LoginManager()
-    # login_manager.login_view = 'auth.login'
-    # login_manager.init_app(app)
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-    # @login_manager.user_loader
-    # def load_user(id):
-    #     return User.query.get(int(id))
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     return app
