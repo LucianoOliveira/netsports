@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User, Club
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db, emailS
+# from . import db, emailS
+from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+# from flask_mail import Mail, Message
+# from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 
 auth =  Blueprint('auth', __name__)
-s = URLSafeTimedSerializer('Thisisasecret123!')
+# s = URLSafeTimedSerializer('Thisisasecret123!')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -70,8 +71,8 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be greater than 6 characters.', category='error')
         else:
-            token = s.dumps(email, salt='email-confirm')
-            link = url_for('auth.confirm_email', token=token, _external=True)
+            # token = s.dumps(email, salt='email-confirm')
+            # link = url_for('auth.confirm_email', token=token, _external=True)
             #new_user = User(email=email, first_name=first_name, mobileNumber=mobileNumber, password=generate_password_hash(password1, method='sha256'), ustatus='A')
             new_user = User(email=email, first_name=first_name, mobileNumber=mobileNumber, password=generate_password_hash(password1, method='sha256'), ustatus='V')
             db.session.add(new_user)
@@ -126,18 +127,18 @@ def sign_up_club():
     return render_template("sign_up_club.html", user=current_user)
 
 
-@auth.route('/confirm_email/<token>')
-def confirm_email(token):
-    try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.ustatus = 'V'
-            db.session.commit()
-            login_user(user, remember=True)
-            return redirect(url_for('views.home'))
-    except SignatureExpired:
-        return '<h1>The token is expired!</h1>'
-    return '<h1>The token worked!</h1>'
+# @auth.route('/confirm_email/<token>')
+# def confirm_email(token):
+#     try:
+#         email = s.loads(token, salt='email-confirm', max_age=3600)
+#         user = User.query.filter_by(email=email).first()
+#         if user:
+#             user.ustatus = 'V'
+#             db.session.commit()
+#             login_user(user, remember=True)
+#             return redirect(url_for('views.home'))
+#     except SignatureExpired:
+#         return '<h1>The token is expired!</h1>'
+#     return '<h1>The token worked!</h1>'
         
         

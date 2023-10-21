@@ -2,11 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
-from flask_mail import Mail, Message
+# from flask_mail import Mail, Message
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
-emailS = Mail()
+# emailS = Mail()
 
 def create_app():
     app = Flask(__name__)
@@ -15,17 +15,17 @@ def create_app():
     db.init_app(app)
 
 
-    mail_settings = {
-    "MAIL_SERVER": 'smtp.gmail.com',
-    "MAIL_PORT": 465,
-    "MAIL_USE_TLS": False,
-    "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": 'GMAIL_USERNAME',
-    "MAIL_PASSWORD": 'GMAIL_PASSWORD'
-    }
+    # mail_settings = {
+    # "MAIL_SERVER": 'smtp.gmail.com',
+    # "MAIL_PORT": 465,
+    # "MAIL_USE_TLS": False,
+    # "MAIL_USE_SSL": True,
+    # "MAIL_USERNAME": 'GMAIL_USERNAME',
+    # "MAIL_PASSWORD": 'GMAIL_PASSWORD'
+    # }
 
-    app.config.update(mail_settings)
-    emailS.init_app(app)
+    # app.config.update(mail_settings)
+    # emailS.init_app(app)
 
 
     from .views import views
