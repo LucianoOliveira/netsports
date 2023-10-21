@@ -16,8 +16,33 @@
     />
 
     <title>{% block title %}{% endblock %}</title>
+
+    <link href="../static/css/pace.min.css" rel="stylesheet"/>
+    
+    <!--favicon-->
+    <link rel="icon" href="../static/images/newIcon.ico" type="image/x-icon">
+    <!-- Vector CSS -->
+    <link href="../static/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"/>
+    <!-- simplebar CSS-->
+    <link href="../static/plugins/simplebar/css/simplebar.css" rel="stylesheet"/>
+    <!-- Bootstrap core CSS-->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- animate CSS-->
+    <link href="../static/css/animate.css" rel="stylesheet" type="text/css"/>
+    <!-- Icons CSS-->
+    <link href="../static/css/icons.css" rel="stylesheet" type="text/css"/>
+    <!-- Sidebar CSS-->
+    <link href="../static/css/sidebar-menu.css" rel="stylesheet"/>
+
+    <!-- Muda o Estilo-->
+    <link href="../static/css/app-style.css" rel="stylesheet"/>
+    <!-- WPT Style-->
+    <!-- <link href="../static/css/app-min.css" rel="stylesheet"/> -->
+
+    <!-- faz com que fique lento -->
+    <!-- <script src="../static/js/pace.min.js"></script> -->
   </head>
-  <body>
+  <body class="bg-theme bg-theme1">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <button
         class="navbar-toggler"
@@ -66,9 +91,17 @@
     {% endwith %}
 
     <div class="container">
-      {% block content %}
-      {% endblock %}
+      <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+      </div>  
     </div>
+
+
+    <!--Start Back To Top Button-->
+    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+    <!--End Back To Top Button-->
+
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

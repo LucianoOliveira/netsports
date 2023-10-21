@@ -1,73 +1,180 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} {% block
     content %}
+<!-- Start wrapper-->
+
+  <h3 align="center">User Information</h3>
+  	
     <form method="POST">
-      <h3 align="center">User Information</h3>
+      
+      <!-- First Row user info  -->
+      <div class="row gutters-sm">
+        <div class="col-md-4 mb-3">
+            <!-- General data -->
+            <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                  <!-- <img src="../static/photos/users/nophoto.jpg" alt="Admin" class="rounded-circle" width="150"> -->
+                  <img src="../static/photos/users/{{ user.id }}/main.jpg" alt="Admin" class="rounded-circle" width="150">
+                <div class="mt-3">
+                    <h4>{{ user.first_name }}</h4>
+                    <!-- <p class="mb-1"><?php echo $numGameDayWins; ?></p>
+                    <p class="mb-2"><?php echo "Último jogo: ".$lastGamePlayed.""; ?></p> -->
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
 
-      <!-- Login Information -->
-      <div class="form-group">
-        <label for="first_name">Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="first_name"
-          name="first_name"
-          placeholder="{{ user.first_name }}"
-          value="{{ user.first_name }}"
-          readonly 
-        />
-      </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-          placeholder="{{ user.email }}"
-          value="{{ user.email }}"
-          readonly 
-        />
-      </div>
-      <div class="form-group">
-        <label for="mobileNumber">Mobile Number</label>
-        <input
-          type="tel"
-          class="form-control"
-          id="mobileNumber"
-          name="mobileNumber"
-          pattern="[0-9]{9}"
-          placeholder="{{ user.mobileNumber }}"
-          value="{{ user.mobileNumber }}"
-          readonly 
-        />
+        <div class="col-md-8">
+            <!-- Full data -->
+            <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Name</h6>
+                </div>
+                <div class="col-sm-9">
+                  {{ user.first_name }}
+                </div>
+                </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9">
+                  {{ user.email }}
+                </div>
+                </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Mobile Number</h6>
+                </div>
+                <div class="col-sm-9">
+                  {{ user.mobileNumber }}
+                </div>
+                </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Birth Date</h6>
+                </div>
+                <div class="col-sm-9">
+                  {{ user.birth_date }}
+                </div>
+                </div>
+                <hr>
+                <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Age</h6>
+                </div>
+                <div class="col-sm-9">
+                <!-- <?php 
+                    $today = date("Y-m-d");
+                    $diff = date_diff(date_create($getPlayerData["pl_birthday"]), date_create($today));
+                    echo $diff->format('%y')." Anos"; 
+                    
+                    ?> -->
+                </div>
+                </div>                
+            </div>
+            </div>
+        </div>
       </div>
 
-      <!-- Location -->
-      <div class="form-group">
-        <label for="postal_code">Postal Code</label>
-        <input
-          type="text"
-          class="form-control"
-          id="postal_code"
-          name="postal_code"
-          placeholder="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
-          pattern="^\d{4}-\d{3}?$"  
-          value="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
-          required
-        />
+      <!-- Personal Info  -->
+      <div class="row gutters-sm">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="postal_code">Postal Code</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="postal_code"
+                      name="postal_code"
+                      placeholder="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
+                      pattern="^\d{4}-\d{3}?$"  
+                      value="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="birth_date">Birth Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="birth_date"
+                      name="birth_date"
+                      value="{% if user.birth_date != null %}{{ user.birth_date }}{% else %}{% endif %}"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- </div> -->
+
+      <!-- Category  -->
+      <!-- <div class="row gutters-sm"> -->
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="main_category">Main Category</label>
+                    <select id="main_category" name="main_category" class="form-control form-select">
+                      <option value="1" {% if user.main_category == 1 %}selected{% else %}{% endif %}>M5</option>
+                      <option value="2" {% if user.main_category == 2 %}selected{% else %}{% endif %}>M4</option>
+                      <option value="3" {% if user.main_category == 3 %}selected{% else %}{% endif %}>M3</option>
+                      <option value="4" {% if user.main_category == 4 %}selected{% else %}{% endif %}>M2</option>
+                      <option value="5" {% if user.main_category == 5 %}selected{% else %}{% endif %}>M1</option>
+                      <option value="6" {% if user.main_category == 6 %}selected{% else %}{% endif %}>F5</option>
+                      <option value="7" {% if user.main_category == 7 %}selected{% else %}{% endif %}>F4</option>
+                      <option value="8" {% if user.main_category == 8 %}selected{% else %}{% endif %}>F3</option>
+                      <option value="9" {% if user.main_category == 9 %}selected{% else %}{% endif %}>F2</option>
+                      <option value="10" {% if user.main_category == 10 %}selected{% else %}{% endif %}>F1</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="mix_category">Mix Category</label>
+                    <select id="mix_category" name="mix_category" class="form-control form-select">
+                      <option value="1" {% if user.mix_category == 1 %}selected{% else %}{% endif %}>MX5</option>
+                      <option value="2" {% if user.mix_category == 2 %}selected{% else %}{% endif %}>MX4</option>
+                      <option value="3" {% if user.mix_category == 3 %}selected{% else %}{% endif %}>MX3</option>
+                      <option value="4" {% if user.mix_category == 4 %}selected{% else %}{% endif %}>MX2</option>
+                      <option value="5" {% if user.mix_category == 5 %}selected{% else %}{% endif %}>MX1</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Personal info -->
-      <div class="form-group">
-        <label for="birth_date">Birth Date</label>
-        <input
-          type="date"
-          class="form-control"
-          id="birth_date"
-          name="birth_date"
-          value="{% if user.birth_date != null %}{{ user.birth_date }}{% else %}{% endif %}"
-        />
-      </div>
 
       <!-- Types of notifications -->
       <div class="form-group form-check form-switch">
@@ -184,33 +291,13 @@
       </div>
 
       <!-- Category -->
-      <div class="form-group">
-        <label for="main_category">Main Category</label>
-        <select id="main_category" name="main_category" class="form-control form-select">
-          <option value="1" {% if user.main_category == 1 %}selected{% else %}{% endif %}>M5</option>
-          <option value="2" {% if user.main_category == 2 %}selected{% else %}{% endif %}>M4</option>
-          <option value="3" {% if user.main_category == 3 %}selected{% else %}{% endif %}>M3</option>
-          <option value="4" {% if user.main_category == 4 %}selected{% else %}{% endif %}>M2</option>
-          <option value="5" {% if user.main_category == 5 %}selected{% else %}{% endif %}>M1</option>
-          <option value="6" {% if user.main_category == 6 %}selected{% else %}{% endif %}>F5</option>
-          <option value="7" {% if user.main_category == 7 %}selected{% else %}{% endif %}>F4</option>
-          <option value="8" {% if user.main_category == 8 %}selected{% else %}{% endif %}>F3</option>
-          <option value="9" {% if user.main_category == 9 %}selected{% else %}{% endif %}>F2</option>
-          <option value="10" {% if user.main_category == 10 %}selected{% else %}{% endif %}>F1</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="mix_category">Mix Category</label>
-        <select id="mix_category" name="mix_category" class="form-control form-select">
-          <option value="1" {% if user.mix_category == 1 %}selected{% else %}{% endif %}>MX5</option>
-          <option value="2" {% if user.mix_category == 2 %}selected{% else %}{% endif %}>MX4</option>
-          <option value="3" {% if user.mix_category == 3 %}selected{% else %}{% endif %}>MX3</option>
-          <option value="4" {% if user.mix_category == 4 %}selected{% else %}{% endif %}>MX2</option>
-          <option value="5" {% if user.mix_category == 5 %}selected{% else %}{% endif %}>MX1</option>
-        </select>
-      </div>
+      
+      
 
       <br />
       <button type="submit" class="btn btn-primary">Submit</button>
+      <br />
     </form>
+  
+
     {% endblock %}
