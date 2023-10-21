@@ -4,8 +4,8 @@ from os import path
 from flask_login import LoginManager
 # from flask_mail import Mail, Message
 
-# db = SQLAlchemy()
-# DB_NAME = "database.db"
+db = SQLAlchemy()
+DB_NAME = "database.db"
 # emailS = Mail()
 
 def create_app():
