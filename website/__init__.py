@@ -12,21 +12,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'Hello From Hell! :D'
 
-
-    @app.route("/")
-    def hello_world():
-        return "<p>Hello, World! Welcome to NetSports! Uploaded from GitHub</p>"
-
-    @app.route("/test")
-    def test():
-        return "<p>Testing New Route</p>"
-
-    @app.route("/new")
-    def new():
-        return "<p>New Route from VsCode</p>"
-
-    # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    # db.init_app(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    db.init_app(app)
 
 
     # mail_settings = {
@@ -42,23 +29,23 @@ def create_app():
     # emailS.init_app(app)
 
 
-    # from .views import views
-    # from .auth import auth
+    from .views import views
+    from .auth import auth
 
-    # app.register_blueprint(views, url_prefix='/')
-    # app.register_blueprint(auth, url_prefix='/') 
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/') 
 
-    # from .models import User, Note
+    from .models import User, Note
 
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
 
-    # login_manager = LoginManager()
-    # login_manager.login_view = 'auth.login'
-    # login_manager.init_app(app)
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-    # @login_manager.user_loader
-    # def load_user(id):
-    #     return User.query.get(int(id))
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     return app
