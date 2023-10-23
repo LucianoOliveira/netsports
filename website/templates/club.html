@@ -1,4 +1,21 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
 {% block content %}
-<h1>This is the Club Management Page</h1>
+<h1 align="center">This is the Club Management Page</h1>
+<ul class="list-group list-group-flush" id="courts">
+    {% for court in club.courts %}
+    <li class="list-group-item">
+      {{ court.court_name }}
+      <button type="button" class="close" onClick="deleteCourt({{ court.id }})">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </li>
+    {% endfor %}
+  </ul>
+  <form method="POST">
+    <textarea name="court_name" id="court_name" class="form-control"></textarea>
+    <br />
+    <div align="center">
+      <button type="submit" class="btn btn-primary">Add Court</button>
+    </div>
+  </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, User
+from .models import Note, User, Court, Club
 from . import db
 import json, os
 from datetime import datetime, date
@@ -38,8 +38,32 @@ def delete_note():
 @views.route('/club', methods=['GET', 'POST'])
 @login_required
 def club():
+    if request.method == 'POST': 
+        court_name = request.form.get('court_name')#Gets the note from the HTML 
+        court_sport = 'Padel' 
+
+        if len(court_name) < 1:
+            flash('Court Name is too short!', category='error') 
+        else:
+            new_court = Court(court_name=court_name, court_sport=court_sport, club_id=current_user.id)  #providing the schema for the note 
+            db.session.add(new_court) #adding the Court             
+            db.session.commit()
+            flash('Court added!', category='success')
     
-    return render_template("club.html", user=current_user)
+    currentClub = Club.query.filter_by(id=current_user.id).first()
+    return render_template("club.html", club=currentClub, user=current_user)
+
+@views.route('/delete-court', methods=['POST'])
+def delete_court():  
+    court = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
+    courtId = court['courtId']
+    court = Court.query.get(courtId)
+    if court:
+        if court.club_id == current_user.id:
+            db.session.delete(court)
+            db.session.commit()
+
+    return jsonify({})
 
 
 

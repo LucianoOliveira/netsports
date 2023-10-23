@@ -34,6 +34,12 @@ class User(db.Model, UserMixin):
     notes = db.relationship('Note')
 
 
+class Court(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    court_name = db.Column(db.String(150))
+    court_sport = db.Column(db.String(150))
+    club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
+
 class Club(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
@@ -41,15 +47,7 @@ class Club(db.Model, UserMixin):
     password = db.Column(db.String(150))
     club_name = db.Column(db.String(150))
     club_address = db.Column(db.String(150))
-    # auth_users = db.relationship('User')
     courts = db.relationship('Court')
-
-class Court(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    court_name = db.Column(db.String(150))
-    court_sport = db.Column(db.String(150))
-    club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
-
 
 class Category(db.Model):  
     id = db.Column(db.Integer, primary_key=True)
