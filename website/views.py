@@ -94,6 +94,9 @@ def userInfo():
             pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
             filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
             
+            print(os.path.abspath(os.path.dirname(__file__)))
+            print(path)
+            print(os.curdir)
             if os.path.exists(path) == False:
                 print('Dir path not found')
                 if os.path.exists(pathRelative) == False:
