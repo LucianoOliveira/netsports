@@ -86,23 +86,25 @@ def userInfo():
         
                  
         # User Profile Part
+        # Only update if file is uploaded
         # print(request.files)
         image = request.files['profile_photo']
-        path = 'website/static/photos/users/'+str(current_user.id)+'/'
-        pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
-        filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
-        # Check if directory exists, if not, create it.
-        if os.path.exists(path) == False:
-            os.mkdir(path)
-        # Check if main.jpg exists, if exists delete it
-        if os.path.exists(filePath) == True:
-            os.remove(filePath)
-        
-        # Upload image to directory
-        fileName = 'main.jpg'
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        newPath = os.path.join(basedir, pathRelative, fileName)
-        image.save(newPath)
+        if image:
+            path = 'website/static/photos/users/'+str(current_user.id)+'/'
+            pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
+            filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
+            # Check if directory exists, if not, create it.
+            if os.path.exists(path) == False:
+                os.mkdir(path)
+            # Check if main.jpg exists, if exists delete it
+            if os.path.exists(filePath) == True:
+                os.remove(filePath)
+            
+            # Upload image to directory
+            fileName = 'main.jpg'
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            newPath = os.path.join(basedir, pathRelative, fileName)
+            image.save(newPath)
 
     else:
         user = User.query.filter_by(id=current_user.id).first()
