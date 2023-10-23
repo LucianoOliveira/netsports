@@ -91,7 +91,7 @@ def userInfo():
         image = request.files['profile_photo']
         if image:
             path = 'website/static/photos/users/'+str(current_user.id)+'/'
-            path2 = 'static/photos/users/'+str(current_user.id)+'/'
+            path2 = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/users/'+str(current_user.id)+'/'
             pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
             filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
             
