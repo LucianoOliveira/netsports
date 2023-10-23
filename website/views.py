@@ -93,18 +93,31 @@ def userInfo():
             path = 'website/static/photos/users/'+str(current_user.id)+'/'
             pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
             filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
-            # Check if directory exists, if not, create it.
-            if os.path.exists(path) == False:
-                os.mkdir(path)
-            # Check if main.jpg exists, if exists delete it
-            if os.path.exists(filePath) == True:
-                os.remove(filePath)
             
-            # Upload image to directory
-            fileName = 'main.jpg'
-            basedir = os.path.abspath(os.path.dirname(__file__))
-            newPath = os.path.join(basedir, pathRelative, fileName)
-            image.save(newPath)
+            if os.path.exists(path) == False:
+                print('Dir path not found')
+                if os.path.exists(pathRelative) == False:
+                    print('Dir patRelative not found')
+                else:
+                    print('PathRelative found')
+            else:
+                print('Path Found')
+
+            
+            if 1==2:
+                # Check if directory exists, if not, create it.
+                if os.path.exists(path) == False:
+                    print('Dir path not found')
+                    os.mkdir(path)
+                # Check if main.jpg exists, if exists delete it
+                if os.path.exists(filePath) == True:
+                    os.remove(filePath)
+                
+                # Upload image to directory
+                fileName = 'main.jpg'
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                newPath = os.path.join(basedir, pathRelative, fileName)
+                image.save(newPath)
 
     else:
         user = User.query.filter_by(id=current_user.id).first()
