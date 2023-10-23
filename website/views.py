@@ -107,7 +107,8 @@ def userInfo():
             fileName = 'main.jpg'
             basedir = os.path.abspath(os.path.dirname(__file__))
             newPath = os.path.join(basedir, pathRelative, fileName)
-            image.save(newPath)
+            # image.save(newPath)
+            image.save(filePath)
 
     else:
         user = User.query.filter_by(id=current_user.id).first()
