@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Note, User
 from . import db
-import json
+import json, os
 from datetime import datetime, date
 
 views =  Blueprint('views', __name__)
@@ -47,6 +47,7 @@ def club():
 @login_required
 def userInfo():
     if request.method == 'POST': 
+        current_user.first_name = request.form.get('first_name')
         current_user.postal_code = request.form.get('postal_code')
         current_user.birth_date = datetime.strptime( request.form.get('birth_date'), '%Y-%m-%d')
 
@@ -82,6 +83,27 @@ def userInfo():
         current_user.mix_category = request.form.get('mix_category')
         db.session.commit()
 
+        
+                 
+        # User Profile Part
+        # print(request.files)
+        image = request.files['profile_photo']
+        path = 'website/static/photos/users/'+str(current_user.id)+'/'
+        pathRelative = 'static\\photos\\users\\'+str(current_user.id)+'\\'
+        filePath = 'website/static/photos/users/'+str(current_user.id)+'/main.jpg'
+        # Check if directory exists, if not, create it.
+        if os.path.exists(path) == False:
+            os.mkdir(path)
+        # Check if main.jpg exists, if exists delete it
+        if os.path.exists(filePath) == True:
+            os.remove(filePath)
+        
+        # Upload image to directory
+        fileName = 'main.jpg'
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        newPath = os.path.join(basedir, pathRelative, fileName)
+        image.save(newPath)
+
     else:
         user = User.query.filter_by(id=current_user.id).first()
         if user and user.postal_code != '':
@@ -94,3 +116,10 @@ def userInfo():
 
 
     return render_template("user_info.html", user=current_user)
+
+@views.route('/display_user_image/<userID>')
+def display_user_image(userID):
+    if os.path.isfile('website/static/photos/users/'+userID+'/main.jpg'):
+        return redirect(url_for('static', filename='photos/users/'+ userID+'/main.jpg'), code=301)
+    else:
+        return redirect(url_for('static', filename='photos/users/nophoto.jpg'), code=301)

@@ -4,324 +4,334 @@
 
   <h3 align="center">User Information</h3>
   	
-    <form method="POST">
-      
-      <!-- First Row user info  -->
-      <div class="row gutters-sm">
-        <div class="col-md-4 mb-3">
-            <!-- General data -->
+    
+        <div class="col-lg-12">
             <div class="card">
             <div class="card-body">
-                <div class="d-flex flex-column align-items-center text-center">
-                  <!-- <img src="../static/photos/users/nophoto.jpg" alt="Admin" class="rounded-circle" width="150"> -->
-                  <img src="../static/photos/users/{{ user.id }}/main.jpg" alt="Admin" class="rounded-circle" width="150">
-                <div class="mt-3">
-                    <h4>{{ user.first_name }}</h4>
-                    <!-- <p class="mb-1"><?php echo $numGameDayWins; ?></p>
-                    <p class="mb-2"><?php echo "Último jogo: ".$lastGamePlayed.""; ?></p> -->
+            <ul class="nav nav-tabs nav-tabs-primary top-icon nav-justified">
+                <li class="nav-item">
+                    <a href="javascript:void();" data-target="#profile" data-toggle="pill" class="nav-link active"><i class="icon-user"></i> <span class="hidden-xs">Profile</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+                </li>
+            </ul>
+            <div class="tab-content p-3">
+                <div class="tab-pane active" id="profile">
+                    <h5 class="mb-3">User Profile</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- General data -->
+                            <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                <img src="{{ url_for('views.display_user_image', userID=user.id ) }}" class="rounded-circle" width="150">
+                                <div class="mt-3">
+                                    <h4>{{ user.first_name }}</h4>
+                                    <!-- <p class="mb-1"><?php echo $numGameDayWins; ?></p>
+                                    <p class="mb-2"><?php echo "Último jogo: ".$lastGamePlayed.""; ?></p> -->
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Name</h6>
+                                </div>
+                                <div class="col-sm-9">
+                                    {{ user.first_name }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9">
+                                    {{ user.email }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Mobile Number</h6>
+                                </div>
+                                <div class="col-sm-9">
+                                    {{ user.mobileNumber }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Birth Date</h6>
+                                </div>
+                                <div class="col-sm-9">
+                                    {{ user.birth_date }}
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="mt-2 mb-3"><span class="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+                            <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <!-- SHOW LATEST GAMES -->
+                                <!-- <tbody>                                    
+                                    <tr>
+                                        <td>
+                                            <strong>Abby</strong> joined ACME Project Team in <strong>`Collaboration`</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Gary</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Kensington</strong> deleted MyBoard3 in <strong>`Discussions`</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>John</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Skell</strong> deleted his post Look at Why this is.. in <strong>`Discussions`</strong>
+                                        </td>
+                                    </tr>
+                                </tbody> -->
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                    <!--/row-->
                 </div>
+                <div class="tab-pane" id="edit">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Name</label>
+                            <div class="col-lg-9">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="first_name"
+                                    name="first_name"
+                                    placeholder="{% if user.first_name != '' %}{{ user.first_name }}{% else %}{% endif %}" 
+                                    value="{% if user.first_name != '' %}{{ user.first_name }}{% else %}{% endif %}"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Postal Code</label>
+                            <div class="col-lg-9">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="postal_code"
+                                    name="postal_code"
+                                    placeholder="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
+                                    pattern="^\d{4}-\d{3}?$"  
+                                    value="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Birth Date</label>
+                            <div class="col-lg-9">
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    id="birth_date"
+                                    name="birth_date"
+                                    value="{% if user.birth_date != null %}{{ user.birth_date }}{% else %}{% endif %}"
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Profile Photo</label>
+                            <div class="col-lg-9">
+                                <input 
+                                    type="file" 
+                                    id="profile_photo" 
+                                    accept="image/*" 
+                                    class="image form-control input-shadow" 
+                                    placeholder="Profile Photo" 
+                                    name="profile_photo">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Main Category</label>
+                            <div class="col-lg-9">
+                                <select id="main_category" name="main_category" class="form-control form-select">
+                                    <option value="1" {% if user.main_category == 1 %}selected{% else %}{% endif %}>M5</option>
+                                    <option value="2" {% if user.main_category == 2 %}selected{% else %}{% endif %}>M4</option>
+                                    <option value="3" {% if user.main_category == 3 %}selected{% else %}{% endif %}>M3</option>
+                                    <option value="4" {% if user.main_category == 4 %}selected{% else %}{% endif %}>M2</option>
+                                    <option value="5" {% if user.main_category == 5 %}selected{% else %}{% endif %}>M1</option>
+                                    <option value="6" {% if user.main_category == 6 %}selected{% else %}{% endif %}>F5</option>
+                                    <option value="7" {% if user.main_category == 7 %}selected{% else %}{% endif %}>F4</option>
+                                    <option value="8" {% if user.main_category == 8 %}selected{% else %}{% endif %}>F3</option>
+                                    <option value="9" {% if user.main_category == 9 %}selected{% else %}{% endif %}>F2</option>
+                                    <option value="10" {% if user.main_category == 10 %}selected{% else %}{% endif %}>F1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Mix Category</label>
+                            <div class="col-lg-9">
+                                <select id="mix_category" name="mix_category" class="form-control form-select">
+                                    <option value="1" {% if user.mix_category == 1 %}selected{% else %}{% endif %}>MX5</option>
+                                    <option value="2" {% if user.mix_category == 2 %}selected{% else %}{% endif %}>MX4</option>
+                                    <option value="3" {% if user.mix_category == 3 %}selected{% else %}{% endif %}>MX3</option>
+                                    <option value="4" {% if user.mix_category == 4 %}selected{% else %}{% endif %}>MX2</option>
+                                    <option value="5" {% if user.mix_category == 5 %}selected{% else %}{% endif %}>MX1</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <div class="form-group form-check form-switch">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="email_notification"
+                                    name="email_notification"
+                                    {% if user.email_notification == True %}checked{% else %}{% endif %}
+                                >
+                                <label class="form-check-label" for="email_notification">Email Notification</label>
+                            </div>
+                            <div class="form-group form-check form-switch">
+                                <input
+                                  type="checkbox"
+                                  class="form-check-input"
+                                  id="sms_notification"
+                                  name="sms_notification"
+                                  {% if user.sms_notification == True %}checked{% else %}{% endif %}
+                                >
+                                <label class="form-check-label" for="sms_notification">SMS Notification</label>
+                            </div>
+                             <div class="form-group form-check form-switch">
+                                <input
+                                  type="checkbox"
+                                  class="form-check-input"
+                                  id="app_notification"
+                                  name="app_notification"
+                                  {% if user.app_notification == True %}checked{% else %}{% endif %}
+                                >
+                                <label class="form-check-label" for="app_notification">App Notification</label>
+                             </div>
+                             <div class="form-group form-check form-switch">
+                                <input
+                                  type="checkbox"
+                                  class="form-check-input"
+                                  id="wts_notification"
+                                  name="wts_notification"
+                                  {% if user.wts_notification == True %}checked{% else %}{% endif %}
+                                >
+                                <label class="form-check-label" for="wts_notification">Whatsapp Notification</label>
+                             </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="mon_notification">Monday Notifications</label>
+                            <select id="mon_notification" name="mon_notification" class="form-control form-select">
+                                <option value="0" {% if user.mon_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                                <option value="1" {% if user.mon_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                                <option value="2" {% if user.mon_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                                <option value="3" {% if user.mon_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                                <option value="4" {% if user.mon_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tue_notification">Tuesday Notifications</label>
+                            <select id="tue_notification" name="tue_notification" class="form-control form-select">
+                              <option value="0" {% if user.tue_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.tue_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.tue_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.tue_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.tue_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wed_notification">Wednesday Notifications</label>
+                            <select id="wed_notification" name="wed_notification" class="form-control form-select">
+                              <option value="0" {% if user.wed_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.wed_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.wed_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.wed_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.wed_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="thu_notification">Thursday Notifications</label>
+                            <select id="thu_notification" name="thu_notification" class="form-control form-select">
+                              <option value="0" {% if user.thu_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.thu_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.thu_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.thu_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.thu_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fri_notification">Friday Notifications</label>
+                            <select id="fri_notification" name="fri_notification" class="form-control form-select">
+                              <option value="0" {% if user.fri_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.fri_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.fri_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.fri_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.fri_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sat_notification">Saturday Notifications</label>
+                            <select id="sat_notification" name="sat_notification" class="form-control form-select">
+                              <option value="0" {% if user.sat_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.sat_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.sat_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.sat_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.sat_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sun_notification">Sunday Notifications</label>
+                            <select id="sun_notification" name="sun_notification" class="form-control form-select">
+                              <option value="0" {% if user.sun_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
+                              <option value="1" {% if user.sun_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
+                              <option value="2" {% if user.sun_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
+                              <option value="3" {% if user.sun_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
+                              <option value="4" {% if user.sun_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
+                            </select>
+                        </div>
+
+                        
+                        <div class="form-group row">
+                            <!-- <label class="col-lg-3 col-form-label form-control-label"></label> -->
+                            <div class="col-lg-12">
+                                <!-- <input type="reset" class="btn btn-secondary" value="Cancel"> -->
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
             </div>
         </div>
-
-        <div class="col-md-8">
-            <!-- Full data -->
-            <div class="card mb-3">
-            <div class="card-body">
-                <div class="row">
-                <div class="col-sm-3">
-                    <h6 class="mb-0">Name</h6>
-                </div>
-                <div class="col-sm-9">
-                  {{ user.first_name }}
-                </div>
-                </div>
-                <hr>
-                <div class="row">
-                <div class="col-sm-3">
-                    <h6 class="mb-0">Email</h6>
-                </div>
-                <div class="col-sm-9">
-                  {{ user.email }}
-                </div>
-                </div>
-                <hr>
-                <div class="row">
-                <div class="col-sm-3">
-                    <h6 class="mb-0">Mobile Number</h6>
-                </div>
-                <div class="col-sm-9">
-                  {{ user.mobileNumber }}
-                </div>
-                </div>
-                <hr>
-                <div class="row">
-                <div class="col-sm-3">
-                    <h6 class="mb-0">Birth Date</h6>
-                </div>
-                <div class="col-sm-9">
-                  {{ user.birth_date }}
-                </div>
-                </div>
-                <hr>
-                <div class="row">
-                <div class="col-sm-3">
-                    <h6 class="mb-0">Age</h6>
-                </div>
-                <div class="col-sm-9">
-                <!-- <?php 
-                    $today = date("Y-m-d");
-                    $diff = date_diff(date_create($getPlayerData["pl_birthday"]), date_create($today));
-                    echo $diff->format('%y')." Anos"; 
-                    
-                    ?> -->
-                </div>
-                </div>                
-            </div>
-            </div>
         </div>
-      </div>
 
-      <!-- Personal Info  -->
-      <div class="row gutters-sm">
-        <div class="col-md-12">
-          <div class="card mb-3">
-            <div class="card-body">
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="postal_code">Postal Code</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="postal_code"
-                      name="postal_code"
-                      placeholder="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
-                      pattern="^\d{4}-\d{3}?$"  
-                      value="{% if user.postal_code != null %}{{ user.postal_code }}{% else %}0000-000{% endif %}"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="birth_date">Birth Date</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      id="birth_date"
-                      name="birth_date"
-                      value="{% if user.birth_date != null %}{{ user.birth_date }}{% else %}{% endif %}"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category  -->
-      <div class="row gutters-sm">
-        <div class="col-md-6">
-          <div class="card mb-3">
-            <div class="card-body">
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="main_category">Main Category</label>
-                    <select id="main_category" name="main_category" class="form-control form-select">
-                      <option value="1" {% if user.main_category == 1 %}selected{% else %}{% endif %}>M5</option>
-                      <option value="2" {% if user.main_category == 2 %}selected{% else %}{% endif %}>M4</option>
-                      <option value="3" {% if user.main_category == 3 %}selected{% else %}{% endif %}>M3</option>
-                      <option value="4" {% if user.main_category == 4 %}selected{% else %}{% endif %}>M2</option>
-                      <option value="5" {% if user.main_category == 5 %}selected{% else %}{% endif %}>M1</option>
-                      <option value="6" {% if user.main_category == 6 %}selected{% else %}{% endif %}>F5</option>
-                      <option value="7" {% if user.main_category == 7 %}selected{% else %}{% endif %}>F4</option>
-                      <option value="8" {% if user.main_category == 8 %}selected{% else %}{% endif %}>F3</option>
-                      <option value="9" {% if user.main_category == 9 %}selected{% else %}{% endif %}>F2</option>
-                      <option value="10" {% if user.main_category == 10 %}selected{% else %}{% endif %}>F1</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="mix_category">Mix Category</label>
-                    <select id="mix_category" name="mix_category" class="form-control form-select">
-                      <option value="1" {% if user.mix_category == 1 %}selected{% else %}{% endif %}>MX5</option>
-                      <option value="2" {% if user.mix_category == 2 %}selected{% else %}{% endif %}>MX4</option>
-                      <option value="3" {% if user.mix_category == 3 %}selected{% else %}{% endif %}>MX3</option>
-                      <option value="4" {% if user.mix_category == 4 %}selected{% else %}{% endif %}>MX2</option>
-                      <option value="5" {% if user.mix_category == 5 %}selected{% else %}{% endif %}>MX1</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      <!-- </div> -->
-
-
-      <!-- Types of notifications  -->
-      <!-- <div class="row gutters-sm"> -->
-        <div class="col-md-6">
-          <div class="card mb-3">
-            <div class="card-body">
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group form-check form-switch">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="email_notification"
-                      name="email_notification"
-                      {% if user.email_notification == True %}checked{% else %}{% endif %}
-                    >
-                    <label class="form-check-label" for="email_notification">Email Notification</label>
-                  </div>
-                  <div class="form-group form-check form-switch">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="sms_notification"
-                      name="sms_notification"
-                      {% if user.sms_notification == True %}checked{% else %}{% endif %}
-                    >
-                    <label class="form-check-label" for="sms_notification">SMS Notification</label>
-                  </div>
-                  <div class="form-group form-check form-switch">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="app_notification"
-                      name="app_notification"
-                      {% if user.app_notification == True %}checked{% else %}{% endif %}
-                    >
-                    <label class="form-check-label" for="app_notification">App Notification</label>
-                  </div>
-                  <div class="form-group form-check form-switch">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="wts_notification"
-                      name="wts_notification"
-                      {% if user.wts_notification == True %}checked{% else %}{% endif %}
-                    >
-                    <label class="form-check-label" for="wts_notification">Whatsapp Notification</label>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Days of week notifications  -->
-      <div class="row gutters-sm">
-        <div class="col-md-12">
-          <div class="card mb-3">
-            <div class="card-body">
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="mon_notification">Monday Notifications</label>
-                    <select id="mon_notification" name="mon_notification" class="form-control form-select">
-                      <option value="0" {% if user.mon_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.mon_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.mon_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.mon_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.mon_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="tue_notification">Tuesday Notifications</label>
-                    <select id="tue_notification" name="tue_notification" class="form-control form-select">
-                      <option value="0" {% if user.tue_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.tue_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.tue_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.tue_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.tue_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="wed_notification">Wednesday Notifications</label>
-                    <select id="wed_notification" name="wed_notification" class="form-control form-select">
-                      <option value="0" {% if user.wed_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.wed_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.wed_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.wed_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.wed_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="thu_notification">Thursday Notifications</label>
-                    <select id="thu_notification" name="thu_notification" class="form-control form-select">
-                      <option value="0" {% if user.thu_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.thu_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.thu_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.thu_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.thu_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="fri_notification">Friday Notifications</label>
-                    <select id="fri_notification" name="fri_notification" class="form-control form-select">
-                      <option value="0" {% if user.fri_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.fri_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.fri_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.fri_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.fri_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="sat_notification">Saturday Notifications</label>
-                    <select id="sat_notification" name="sat_notification" class="form-control form-select">
-                      <option value="0" {% if user.sat_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.sat_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.sat_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.sat_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.sat_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="sun_notification">Sunday Notifications</label>
-                    <select id="sun_notification" name="sun_notification" class="form-control form-select">
-                      <option value="0" {% if user.sun_notification == 0 %}selected{% else %}{% endif %}>No Notifications</option>
-                      <option value="1" {% if user.sun_notification == 1 %}selected{% else %}{% endif %}>Morning 09:00 to 12:00</option>
-                      <option value="2" {% if user.sun_notification == 2 %}selected{% else %}{% endif %}>Afternoon 12:00 to 18:00</option>
-                      <option value="3" {% if user.sun_notification == 3 %}selected{% else %}{% endif %}>Evening 18:00 to 23:00</option>
-                      <option value="4" {% if user.sun_notification == 4 %}selected{% else %}{% endif %}>All Day 09:00 to 23:00</option>
-                    </select>
-                  </div>                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        <br />
       <br />
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <br />
-    </form>
+
   
 
-    {% endblock %}
+{% endblock %}
