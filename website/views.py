@@ -125,7 +125,8 @@ def userInfo():
 
 @views.route('/display_user_image/<userID>')
 def display_user_image(userID):
-    if os.path.isfile('website/static/photos/users/'+userID+'/main.jpg'):
+    filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/users/'+str(userID)+'/main.jpg'
+    if os.path.isfile(filePath):
         return redirect(url_for('static', filename='photos/users/'+ userID+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/users/nophoto.jpg'), code=301)
