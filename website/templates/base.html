@@ -140,5 +140,12 @@
           }
       </script>
     {% endblock %}
+
+    <!-- Script to go to next page on click row table -->
+    <script>
+      $(document.body).on("click", "tr[data-href]", function () {
+          window.location.href = this.dataset.href;
+      });
+    </script>
   </body>
 </html>

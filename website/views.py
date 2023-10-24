@@ -154,3 +154,17 @@ def display_user_image(userID):
         return redirect(url_for('static', filename='photos/users/'+ userID+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/users/nophoto.jpg'), code=301)
+    
+@views.route('/display_court_image/<courtID>')
+def display_court_image(courtID):
+    filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/courts/'+str(courtID)+'/main.jpg'
+    if os.path.isfile(filePath):
+        return redirect(url_for('static', filename='photos/courts/'+ courtID+'/main.jpg'), code=301)
+    else:
+        return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)    
+    
+
+@views.route('/court_detail/<courtID>')
+@login_required
+def court_detail(courtID):
+    return render_template("court_detail.html", court=courtID, user=current_user)   

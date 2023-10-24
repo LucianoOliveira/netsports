@@ -10,12 +10,64 @@
       </button>
     </li>
     {% endfor %}
-  </ul>
-  <form method="POST">
-    <textarea name="court_name" id="court_name" class="form-control"></textarea>
-    <br />
-    <div align="center">
-      <button type="submit" class="btn btn-primary">Add Court</button>
+</ul>
+<form method="POST">
+  <textarea name="court_name" id="court_name" class="form-control"></textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Court</button>
+  </div>
+</form>
+<hr>
+<h1 align="center">Table for all Courts in Club</h1>
+<div class="row">
+  <div class="col-12 col-lg-12">
+    <div class="card">
+      <div class="card-header">Courts
+        <div class="card-action">
+          <div class="dropdown">
+            <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+              <i class="icon-options"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="javascript:void();">Add Court</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush table-borderless">
+            <thead>
+            <tr>
+              <th colspan="2" style="text-align:center">Court</th>
+              <th>Next Game</th>
+              <th>H. Today</th>
+              <th>H. Tomorrow</th>
+              <th>Avr. Occupation</th>
+            </tr>
+            </thead>
+            <tbody>
+              {% for court in club.courts %}
+              <!-- <tr data-href="playerBio.php?playerId=<?php echo $data['pl_id']; ?>"> -->
+              <tr onclick="window.location.href='{{ url_for('views.court_detail', courtID=court) }}';">                      
+                <td>
+                  <img src="{{ url_for('views.display_court_image', courtID=court.id ) }}" class="rounded-circle" width="100" height="100" object-fit="cover" alt="product img">
+                </td>
+                <td>{{ court.court_name }}</td>
+                <td>09/12/2024</td>
+                <td>6 hours</td>
+                <td>6.5 hours</td>
+                <td>
+                  <div class="progress shadow" style="height: 3px;">
+                    <div class="progress-bar" role="progressbar" style="width: 90%">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
     </div>
-  </form>
+  </div>
+ </div><!--End Row-->
 {% endblock %}
