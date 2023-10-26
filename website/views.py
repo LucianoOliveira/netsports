@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, User, Court, Club
+from .models import Note, User, Court, Club, Match
 from . import db
 import json, os
 from datetime import datetime, date
@@ -19,7 +19,7 @@ def home():
             new_note = Note(data=note, user_id=current_user.id)  #providing the schema for the note 
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
-            flash('Note added!', category='success')
+            # flash('Note added!', category='success')
 
     return render_template("home.html", user=current_user)
 
@@ -48,10 +48,31 @@ def club():
             new_court = Court(court_name=court_name, court_sport=court_sport, club_id=current_user.id)  #providing the schema for the note 
             db.session.add(new_court) #adding the Court             
             db.session.commit()
-            flash('Court added!', category='success')
+            # flash('Court added!', category='success')
     
     currentClub = Club.query.filter_by(id=current_user.id).first()
     return render_template("club.html", club=currentClub, user=current_user)
+
+@views.route('/create_match/<courtID>', methods=['GET', 'POST'])
+@login_required
+def create_match(courtID):
+    if request.method == 'POST':
+        date_match = datetime.strptime( request.form.get('date_match'), '%Y-%m-%dT%H:%M') 
+        match_duration = request.form.get('match_duration') 
+        match_type = request.form.get('match_type') 
+        court_id = courtID
+        num_player_total = request.form.get('num_player_total') 
+        num_player_enrolled = 0 
+        match_status = request.form.get('match_status') 
+        
+        new_match = Match(date_match=date_match, match_duration=match_duration, match_type=match_type, court_id=court_id, num_player_total=num_player_total, num_player_enrolled=num_player_enrolled, match_status=match_status)
+        db.session.add(new_match) #add new match
+        db.session.commit() 
+        current_Court = Court.query.filter_by(id=courtID).first()
+        return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court)    
+
+
+    return render_template("create_match.html", court_ID=courtID, user=current_user)
 
 @views.route('/delete-court', methods=['POST'])
 def delete_court():  
@@ -62,6 +83,19 @@ def delete_court():
         if court.club_id == current_user.id:
             db.session.delete(court)
             db.session.commit()
+
+    return jsonify({})
+
+
+@views.route('/delete-match', methods=['POST'])
+def delete_match():  
+    match = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
+    matchId = match['matchId']
+    court = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
+    courtId = court['courtId']
+    match = Match.query.get(matchId)
+    db.session.delete(match)
+    db.session.commit()
 
     return jsonify({})
 
@@ -167,4 +201,23 @@ def display_court_image(courtID):
 @views.route('/court_detail/<courtID>')
 @login_required
 def court_detail(courtID):
-    return render_template("court_detail.html", court=courtID, user=current_user)   
+    current_Court = Court.query.filter_by(id=courtID).first()
+    return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court)   
+
+@views.route('/court_details/<courtID>', methods=['GET', 'POST'])
+def court_details(courtID):
+    print('Hello from court_details '+str(courtID))
+    return 8
+
+@views.route('/match_detail/<matchID>')
+@login_required
+def match_detail(matchID):
+    current_Match = Match.query.filter_by(id=matchID).first()
+    pass
+    # return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court) 
+
+@views.route('/testing')
+def testing():
+    # return 'test correct'
+    return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)
+

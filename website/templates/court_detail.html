@@ -1,4 +1,48 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
 {% block content %}
-<h1>COURT DETAILS YAY</h1>
+<div class="row">
+<div class="col-12 col-lg-12">
+    <div class="card">
+    <div class="card-header">Matches
+        <div class="card-action">
+        <div class="dropdown">
+            <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+            <i class="icon-options"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="{{ url_for('views.create_match', courtID=court ) }}">Create Match</a>
+            <!-- <a class="dropdown-item" onclick="window.location.href='{{ url_for('views.create_match', courtID=court.id ) }}';">Create Match</a> -->
+            </div>
+        </div>
+        </div>
+        <div class="table-responsive">
+        <table class="table align-items-center table-flush table-borderless">
+            <thead>
+            <tr>
+            <th>Date Time</th>
+            <th colspan="2" style="text-align:center">Players</th>
+            <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for match in currentCourt.matches %}
+            <!-- <tr onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';"> -->
+            <tr>
+                <td>{{ match.date_match }}</td>
+                <td>{{ match.num_player_enrolled }}</td>                      
+                <td>{{ match.num_player_total }}</td>                      
+                <td>{{ match.match_status }}</td>  
+                <td>
+                    <button type="button" class="close" onClick="deleteMatch({{ match.id }}, {{ currentCourt.id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </td>                    
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+</div><!--End Row-->
 {% endblock %}

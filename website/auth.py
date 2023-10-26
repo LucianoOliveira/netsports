@@ -21,7 +21,7 @@ def login():
         if user:
             if user.ustatus == 'V':
                 if check_password_hash(user.password, password):
-                    flash('Logged in successfully!', category='success')
+                    # flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)
                     return redirect(url_for('views.home'))
                 else:
@@ -32,7 +32,7 @@ def login():
             club = Club.query.filter_by(email=email).first()
             if club:
                 if check_password_hash(club.password, password):
-                    flash('Logged in successfully!', category='success')
+                    # flash('Logged in successfully!', category='success')
                     login_user(club, remember=True)
                     return redirect(url_for('views.club'))
                 else:
@@ -84,7 +84,7 @@ def sign_up():
             # flash('User created successfully, check Email for verification!', category='success')
             
             login_user(new_user, remember=True)
-            flash('User created successfully!', category='success')
+            # flash('User created successfully!', category='success')
             return redirect(url_for('views.home'))
 
 
@@ -120,7 +120,7 @@ def sign_up_club():
             db.session.add(new_club)
             db.session.commit()
             login_user(new_club, remember=True)
-            flash('Club signed up successfully', category='success')
+            # flash('Club signed up successfully', category='success')
             return redirect(url_for('views.club'))
 
 

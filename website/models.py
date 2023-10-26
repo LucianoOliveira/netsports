@@ -33,12 +33,22 @@ class User(db.Model, UserMixin):
     sun_notification = db.Column(db.Integer) #0:No 1:9-12 2:12-18 3:18-23 4:all-day
     notes = db.relationship('Note')
 
+class Match(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_match = db.Column(db.DateTime(timezone=True))
+    match_duration = db.Column(db.Integer)
+    match_type = db.Column(db.String(100))
+    court_id = db.Column(db.Integer, db.ForeignKey('court.id'))
+    num_player_total = db.Column(db.Integer)
+    num_player_enrolled = db.Column(db.Integer)
+    match_status = db.Column(db.Integer) #0:Cancelled 1:Announced 2:AcceptingPlayers 3:Full 4:BeingPlayed 5:Ended
 
 class Court(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     court_name = db.Column(db.String(150))
     court_sport = db.Column(db.String(150))
     club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
+    matches = db.relationship('Match')
 
 class Club(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

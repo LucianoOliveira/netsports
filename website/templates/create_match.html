@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
+{% block content %}
+    <form method="POST">
+      <h3 align="center">Create Match</h3>
+      <div class="form-group">
+        <label for="date_match">Match Date</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="date_match"
+          name="date_match"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="match_duration">Match Duration (Minutes)</label>
+        <input
+          type="number"
+          class="form-control"
+          id="match_duration"
+          name="match_duration"
+          placeholder="90"
+          value="90"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="match_type">Match Type</label>
+        <input
+          type="text"
+          class="form-control"
+          id="match_type"
+          name="match_type"
+          placeholder="Match or Non-Stop"
+          value="Match"
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="num_player_total">Total Number of Players</label>
+        <input
+          type="number"
+          class="form-control"
+          id="num_player_total"
+          name="num_player_total"
+          value="4"
+          readonly
+        />
+      </div>
+      <div class="form-group row">
+        <label class="col-lg-3 col-form-label form-control-label">Match Status</label>
+        <div class="col-lg-9">
+            <select id="mix_category" name="mix_category" class="form-control form-select">
+                <option value="0">Cancelled</option>
+                <option value="1" selected>Announced</option>
+                <option value="2">Accepting Players</option>
+                <option value="3">Full</option>
+                <option value="4">Being Played</option>
+                <option value="5">Ended</option>
+            </select>
+        </div>
+    </div>
+      <br />
+      <button type="submit" class="btn btn-primary">Create Match</button>
+    </form>
+{% endblock %}
