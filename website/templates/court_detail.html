@@ -20,7 +20,7 @@
             <thead>
             <tr>
             <th>Date Time</th>
-            <th colspan="2" style="text-align:center">Players</th>
+            <th>Players</th>
             <th>Status</th>
             </tr>
             </thead>
@@ -28,8 +28,7 @@
             {% for match in currentCourt.matches %}
             <tr>
                 <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.date_match }}</td>
-                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.num_player_enrolled }}</td>                      
-                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.num_player_total }}</td>                      
+                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.num_player_enrolled }} / {{ match.num_player_total }}</td>                                      
                 <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.match_status }}</td>  
                 <td>
                     <button type="button" class="close" onClick="deleteMatch({{ match.id }}, {{ currentCourt.id }})">
