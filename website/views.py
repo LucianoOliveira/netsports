@@ -131,7 +131,9 @@ def create_match(courtID):
             
                 return redirect(url_for('views.court_detail', courtID=courtID, type='Club'))
 
-    return render_template("create_match.html", court_ID=courtID, user=current_user, club=current_user, type='Club')
+    current_Court = Court.query.filter_by(id=courtID).first()
+    current_Club = Club.query.filter(Club.id == current_Court.club_id).first()
+    return render_template("create_match.html", court_ID=courtID, user=current_user, club=current_Club, type='Club')
 
 @views.route('/delete-court', methods=['POST'])
 def delete_court():  
@@ -272,7 +274,8 @@ def display_club_image(clubID):
 @login_required
 def court_detail(courtID):
     current_Court = Court.query.filter_by(id=courtID).first()
-    return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court, club=current_user, type='Club')   
+    current_Club = Club.query.filter(Club.id == current_Court.club_id).first()
+    return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court, club=current_Club, type='Club')   
 
 @views.route('/court_details/<courtID>', methods=['GET', 'POST'])
 def court_details(courtID):
