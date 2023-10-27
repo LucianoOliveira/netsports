@@ -1,24 +1,5 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
 {% block content %}
-<h1 align="center">This is the Club Management Page</h1>
-<ul class="list-group list-group-flush" id="courts">
-    {% for court in club.courts %}
-    <li class="list-group-item">
-      {{ court.court_name }}
-      <button type="button" class="close" onClick="deleteCourt({{ court.id }})">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </li>
-    {% endfor %}
-</ul>
-<form method="POST">
-  <textarea name="court_name" id="court_name" class="form-control"></textarea>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Court</button>
-  </div>
-</form>
-<hr>
 <h1 align="center">Table for all Courts in Club</h1>
 <div class="row">
   <div class="col-12 col-lg-12">
@@ -33,7 +14,7 @@
               <a class="dropdown-item" href="javascript:void();">Create Match</a>
               <a class="dropdown-item" href="javascript:void();">Create Event</a>
               <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void();">Add Court</a>
+                <a class="dropdown-item" href="{{ url_for('views.create_court') }}">Add Court</a>
               </div>
             </div>
           </div>
@@ -52,19 +33,24 @@
             <tbody>
               {% for court in club.courts %}
               <!-- <tr data-href="playerBio.php?playerId=<?php echo $data['pl_id']; ?>"> -->
-              <tr onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">                      
-                <td>
+              <tr>                      
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">
                   <img src="{{ url_for('views.display_court_image', courtID=court.id ) }}" class="rounded-circle" width="100" height="100" object-fit="cover" alt="product img">
                 </td>
-                <td>{{ court.court_name }}</td>
-                <td>09/12/2024</td>
-                <td>{{ url_for('views.court_details', courtID=court.id ) }}</td>
-                <td>{{ url_for('views.testing') }}</td>
-                <td>
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">{{ court.court_name }}</td>
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">{{ nextGame(court.id) }}</td>
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">{{ hoursToday(court.id) }}</td>
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">{{ hoursTomorrow(court.id) }}</td>
+                <td onclick="window.location.href='{{ url_for('views.court_detail', courtID=court.id) }}';">
                   <div class="progress shadow" style="height: 3px;">
-                    <div class="progress-bar" role="progressbar" style="width: 90%">
+                    <div class="progress-bar" role="progressbar" style="width: {{ averageCourtOccupation(court.id) }}%">
                     </div>
                   </div>
+                </td>
+                <td>
+                  <button type="button" class="close" onClick="deleteCourt({{ court.id }})">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </td>
               </tr>
               {% endfor %}

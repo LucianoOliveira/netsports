@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from .models import Note, User, Court, Club, Match
 from . import db
 import json, os
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 views =  Blueprint('views', __name__)
 
@@ -21,7 +21,21 @@ def home():
             db.session.commit()
             # flash('Note added!', category='success')
 
-    return render_template("home.html", user=current_user)
+    user_type = ''
+    user = User.query.filter_by(email=current_user.email).first()
+    if user:
+        user_type = 'User'
+        dt = date.today()
+        min_dt = datetime.combine(dt, datetime.min.time())
+        open_matches = Match.query.filter(Match.date_match>=min_dt).order_by(Match.date_match.asc())
+        return render_template("home.html", user=current_user, type=user_type, matches=open_matches)
+    else:
+        club = Club.query.filter_by(email=current_user.email).first()
+        if club:
+            user_type = 'Club'
+            return render_template("club.html", user=current_user, type=user_type)
+
+    return render_template("home.html", user=current_user, type=user_type)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():  
@@ -39,19 +53,49 @@ def delete_note():
 @login_required
 def club():
     if request.method == 'POST': 
-        court_name = request.form.get('court_name')#Gets the note from the HTML 
-        court_sport = 'Padel' 
-
-        if len(court_name) < 1:
-            flash('Court Name is too short!', category='error') 
-        else:
-            new_court = Court(court_name=court_name, court_sport=court_sport, club_id=current_user.id)  #providing the schema for the note 
-            db.session.add(new_court) #adding the Court             
-            db.session.commit()
-            # flash('Court added!', category='success')
+        pass
     
     currentClub = Club.query.filter_by(id=current_user.id).first()
     return render_template("club.html", club=currentClub, user=current_user)
+
+@views.route('/create_court', methods=['GET', 'POST'])
+@login_required
+def create_court():
+    club = Club.query.filter_by(id=current_user.id).first()
+    user_type = 'Club'
+    if request.method == 'POST':
+        court_name = request.form.get('court_name') 
+        court_sport = request.form.get('court_sport') 
+        new_court = Court(court_name=court_name, court_sport=court_sport, club_id=club.id)
+        db.session.add(new_court) #add new match
+        db.session.commit() 
+        # Submit da foto do court com o id new_court.id
+        image = request.files['court_photo']
+        if image:
+            # path = 'website/static/photos/courts/'+str(new_court.id)+'/'
+            path = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/courts/'+str(new_court.id)+'/'
+            pathRelative = 'static\\photos\\courts\\'+str(new_court.id)+'\\'
+            filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/courts/'+str(new_court.id)+'/main.jpg'
+                    
+            # Check if directory exists, if not, create it.
+            if os.path.exists(path) == False:
+                print('Dir path not found')
+                os.mkdir(path)
+            # Check if main.jpg exists, if exists delete it
+            if os.path.exists(filePath) == True:
+                os.remove(filePath)
+            
+            # Upload image to directory
+            fileName = 'main.jpg'
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            newPath = os.path.join(basedir, pathRelative, fileName)
+            # image.save(newPath)
+            image.save(filePath)
+
+        currentClub = Club.query.filter_by(id=current_user.id).first()
+        return redirect(url_for('views.club'))
+
+    return render_template("add_court.html", user=current_user, type=user_type)
 
 @views.route('/create_match/<courtID>', methods=['GET', 'POST'])
 @login_required
@@ -64,13 +108,28 @@ def create_match(courtID):
         num_player_total = request.form.get('num_player_total') 
         num_player_enrolled = 0 
         match_status = request.form.get('match_status') 
-        
-        new_match = Match(date_match=date_match, match_duration=match_duration, match_type=match_type, court_id=court_id, num_player_total=num_player_total, num_player_enrolled=num_player_enrolled, match_status=match_status)
-        db.session.add(new_match) #add new match
-        db.session.commit() 
-        current_Court = Court.query.filter_by(id=courtID).first()
-        return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court)    
 
+        # check if there already is a match for the same court at the same time
+        date_start = date_match
+        date_end = date_start + timedelta(minutes = int(match_duration))
+        matches = Match.query.filter(Match.court_id==court_id).all()
+        overlap = ''
+        for match in matches:
+            existingMatchEndTime = match.date_match + timedelta(minutes = int(match.match_duration))
+            if (date_start>=match.date_match and date_start<=existingMatchEndTime) or (date_end>=match.date_match and date_end<=existingMatchEndTime):
+                overlap = 'yes'
+        # otherMatch = Match.query.filter(Match.date_match>=date_start, Match.date_match<=date_end, Match.court_id==court_id).all()
+        if overlap=='yes':
+            flash('There is already a match occuring in that slot.', category='error')
+        else:
+            if courtID:
+                new_match = Match(date_match=date_match, match_duration=match_duration, match_type=match_type, court_id=court_id, num_player_total=num_player_total, num_player_enrolled=num_player_enrolled, match_status=match_status)
+                db.session.add(new_match) #add new match
+                db.session.commit() 
+                current_Court = Court.query.filter_by(id=courtID).first()
+                # return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court)    
+            
+                return redirect(url_for('views.court_detail', courtID=courtID))
 
     return render_template("create_match.html", court_ID=courtID, user=current_user)
 
@@ -81,6 +140,11 @@ def delete_court():
     court = Court.query.get(courtId)
     if court:
         if court.club_id == current_user.id:
+            # Check for photo if exists, delete folder
+            filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/courts/'+str(court.id)+'/main.jpg'
+            if os.path.exists(filePath) == True:
+                os.remove(filePath)
+                
             db.session.delete(court)
             db.session.commit()
 
@@ -91,8 +155,6 @@ def delete_court():
 def delete_match():  
     match = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
     matchId = match['matchId']
-    court = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
-    courtId = court['courtId']
     match = Match.query.get(matchId)
     db.session.delete(match)
     db.session.commit()
@@ -179,7 +241,7 @@ def userInfo():
 
 
 
-    return render_template("user_info.html", user=current_user)
+    return render_template("user_info.html", user=current_user, type='User')
 
 @views.route('/display_user_image/<userID>')
 def display_user_image(userID):
@@ -221,3 +283,5 @@ def testing():
     # return 'test correct'
     return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)
 
+def exampleFunctions(itemID):
+        return 'tests correct' + str(itemID)
