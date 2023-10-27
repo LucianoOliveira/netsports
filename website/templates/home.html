@@ -4,7 +4,7 @@
   <table class="table align-items-center table-flush table-borderless">
       <thead>
       <tr>
-      <th>ID</th>
+      <!-- <th>ID</th> -->
       <th>Club</th>
       <th>Court</th>
       <th>Date Time</th>
@@ -16,7 +16,7 @@
       {% for match in matches %}
       <!-- <tr onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';"> -->
       <tr>
-          <td>{{ match.id }}</td>
+          <!-- <td>{{ match.id }}</td> -->
           <td>{{ getClubNameFromCourt(match.court_id) }}</td>
           <td>{{ getCourtNameFromCourtID(match.court_id) }}</td>
           <td>{{ match.date_match }}</td>

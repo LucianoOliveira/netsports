@@ -43,31 +43,188 @@
     <!-- <script src="../static/js/pace.min.js"></script> -->
   </head>
   <body class="bg-theme bg-theme2">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbar"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar">
-        <div class="navbar-nav">
-          {% if user.is_authenticated %}
-            <a class="nav-item nav-link" id="home" href="/">Home</a>
-            {% if type=='User' %}
-            <a class="nav-item nav-link" id="userInfo" href="/userInfo">User Information</a>
-            {% endif %}
-            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-          {% else %}
-            <a class="nav-item nav-link" id="login" href="/login">Login</a>
-            <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-            <a class="nav-item nav-link" id="signUp" href="/sign-up-club">Sign Up Club</a>
-          {% endif %}
-        </div>
+
+    <!-- Start wrapper-->
+    <div id="wrapper">
+
+      <!--Start sidebar-wrapper-->
+      <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
+        <div class="brand-logo">
+        {% if user.is_authenticated %}
+        {% if type=='User' %}  
+        <a href="/">
+          <!-- <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon"> -->
+          <h5 class="logo-text">Net Sports</h5>
+        </a>
+        {% else %}
+        <a href="/club">
+          <!-- <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon"> -->
+          <h5 class="logo-text">Net Sports</h5>
+        </a>
+        {% endif %}
+        {% else %}
+        <a href="/">
+          <!-- <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon"> -->
+          <h5 class="logo-text">Net Sports</h5>
+        </a>
+        {% endif %}
       </div>
+      <ul class="sidebar-menu do-nicescrol">
+        <li class="sidebar-header">MAIN NAVIGATION</li>
+        <li>
+          {% if user.is_authenticated %}
+          {% if type=='User' %}  
+          <a href="/">
+            <i class="zmdi zmdi-view-dashboard"></i> <span>Home</span>
+          </a>
+          {% else %}
+          <a href="/club">
+            <i class="zmdi zmdi-view-dashboard"></i> <span>Home</span>
+          </a>
+          {% endif %}
+          {% else %}
+          <a href="/">
+            <i class="zmdi zmdi-view-dashboard"></i> <span>Home</span>
+          </a>
+          {% endif %}
+          
+        </li>
+
+        <!-- <li>
+          <a href="icons.html">
+            <i class="zmdi zmdi-invert-colors"></i> <span>UI Icons</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="forms.html">
+            <i class="zmdi zmdi-format-list-bulleted"></i> <span>Forms</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="tables.html">
+            <i class="zmdi zmdi-grid"></i> <span>Tables</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="calendar.html">
+            <i class="zmdi zmdi-calendar-check"></i> <span>Calendar</span>
+            <small class="badge float-right badge-light">New</small>
+          </a>
+        </li>
+
+        <li>
+          <a href="profile.html">
+            <i class="zmdi zmdi-face"></i> <span>Profile</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="login.html" target="_blank">
+            <i class="zmdi zmdi-lock"></i> <span>Login</span>
+          </a>
+        </li>
+
+          <li>
+          <a href="register.html" target="_blank">
+            <i class="zmdi zmdi-account-circle"></i> <span>Registration</span>
+          </a>
+        </li>
+
+        <li class="sidebar-header">LABELS</li>
+        <li><a href="javaScript:void();"><i class="zmdi zmdi-coffee text-danger"></i> <span>Important</span></a></li>
+        <li><a href="javaScript:void();"><i class="zmdi zmdi-chart-donut text-success"></i> <span>Warning</span></a></li>
+        <li><a href="javaScript:void();"><i class="zmdi zmdi-share text-info"></i> <span>Information</span></a></li> -->
+
+      </ul>
+      
+      </div>
+      <!--End sidebar-wrapper-->
+
+    <!--Start topbar header-->
+    <header class="topbar-nav">
+      <nav class="navbar navbar-expand fixed-top">
+      <ul class="navbar-nav mr-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link toggle-menu" href="javascript:void();">
+            <i class="icon-menu menu-icon"></i>
+          </a>
+        </li>
+      </ul>
+          
+      <ul class="navbar-nav align-items-center right-nav-link">
+        <li class="nav-item">
+          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
+            {% if user.is_authenticated %}
+              {% if type=='User' %}
+              <span class="user-profile"><img src="{{ url_for('views.display_user_image', userID=user.id ) }}" class="img-circle" alt="user avatar"></span>
+              {% else %}
+              <span class="user-profile"><img src="{{ url_for('views.display_club_image', clubID=user.id ) }}" class="img-circle" alt="user avatar"></span>
+              {% endif %}
+            {% else %}
+            <span class="user-profile"><img src="{{ url_for('views.display_user_image', userID=0 ) }}" class="img-circle" alt="user avatar"></span>
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li class="dropdown-item user-details">
+            <a href="javaScript:void();">
+                {% if user.is_authenticated %}
+                  {% if type=='User' %}
+                  <div class="media">
+                    <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_user_image', userID=user.id ) }}" alt="user avatar"></div>
+                  <div class="media-body">
+                  <h6 class="mt-2 user-title">{{ user.first_name }}</h6>
+                  <p class="user-subtitle">{{ user.email }}</p>
+                  </div>
+                  </div>
+                  {% else %}
+                  <div class="media">
+                    <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_club_image', clubID=user.id ) }}" alt="user avatar"></div>
+                  <div class="media-body">
+                  <h6 class="mt-2 user-title">{{ club.club_name }}</h6>
+                  <p class="user-subtitle">{{ club.email }}</p>
+                  </div>
+                  </div>
+                  {% endif %}
+                {% else %}
+                <div class="media">
+                  <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_user_image', userID=0 ) }}" alt="user avatar"></div>
+                <div class="media-body">
+                <h6 class="mt-2 user-title"></h6>
+                <p class="user-subtitle"></p>
+                </div>
+                </div>
+                {% endif %}
+              </a>
+            </li>
+            {% if user.is_authenticated %}
+            {% if type=='User' %}
+            <li class="dropdown-divider"></li>
+            <a id="userInfo" href="/userInfo"><li class="dropdown-item"><i class="zmdi zmdi-face mr-2"></i> User Informationt</li></a>
+            <!-- <a class="nav-item nav-link" id="userInfo" href="/userInfo">User Information</a> -->
+            {% endif %}
+            <li class="dropdown-divider"></li>
+            <a id="logout" href="/logout"><li class="dropdown-item"><i class="icon-power mr-2"></i> Logout</li></a>
+            <!-- <a class="nav-item nav-link" id="logout" href="/logout">Logout</a> -->
+            {% else %}
+            <li class="dropdown-divider"></li>
+            <a id="signUp" href="/sign-up"><li class="dropdown-item"><i class="zmdi zmdi-account-circle mr-2"></i> Sign Up</li></a>
+            <!-- <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a> -->
+            <li class="dropdown-divider"></li>
+            <a id="signUpClub" href="/sign-up-club"><li class="dropdown-item"><i class="zmdi zmdi-account-circle mr-2"></i> Sign Up Club</li></a>
+            <!-- <a class="nav-item nav-link" id="signUp" href="/sign-up-club">Sign Up Club</a> -->
+            <li class="dropdown-divider"></li>
+            <a id="login" href="/login"><li class="dropdown-item"><i class="zmdi zmdi-lock mr-2"></i> Login</li></a>
+            <!-- <a class="nav-item nav-link" id="login" href="/login">Login</a> -->
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
     </nav>
+    </header>
+    <!--End topbar header-->
 
     <!-- FLASH MESSAGES -->
     {% with messages = get_flashed_messages(with_categories=true) %} 
@@ -92,17 +249,51 @@
       {% endif %} 
     {% endwith %}
 
-    <div class="container">
-      <div class="content-wrapper">
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+      <div class="container-fluid">
         {% block content %}
         {% endblock %}
+
+      <!--start overlay-->
+		  <div class="overlay toggle-menu"></div>
+      <!--end overlay-->  
+
       </div>  
     </div>
-
 
     <!--Start Back To Top Button-->
     <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
     <!--End Back To Top Button-->
+
+    <!--Start footer-->
+      <footer class="footer">
+        <div class="container">
+          <div class="text-center">
+            Copyright © 2023 Luciano Oliveira
+          </div>
+        </div>
+      </footer>
+    <!--End footer-->
+
+</div><!--End wrapper-->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <!-- <script src="static/js/bootstrap.min.js"></script> -->
+    <!-- simplebar js -->
+    <script src="static/plugins/simplebar/js/simplebar.js"></script>
+    <!-- sidebar-menu js -->
+    <script src="static/js/sidebar-menu.js"></script>
+    <!-- loader scripts -->
+    <script src="static/js/jquery.loading-indicator.js"></script>
+    <!-- Custom scripts -->
+    <script src="static/js/app-script.js"></script>
+    <!-- Chart js -->
+    <!-- <script src="static/plugins/Chart.js/Chart.min.js"></script> -->
+    <!-- Index js -->
+    <!-- <script src="static/js/index.js"></script> -->
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

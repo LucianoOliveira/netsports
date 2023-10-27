@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} {% block
     content %}
     <form method="POST" enctype="multipart/form-data">
-      <h3 align="center">Sign Up</h3>
+      <h3 align="center">Sign Up Club</h3>
       <div class="form-group">
         <label for="email">Email Address</label>
         <input
@@ -24,9 +24,8 @@
           required
         />
       </div>
-      <div class="form-group row">
+      <div class="form-group">
         <label for="club_logo">Club Logo</label>
-        <div class="col-lg-9">
             <input 
                 type="file" 
                 id="club_logo" 
@@ -34,7 +33,6 @@
                 class="image form-control input-shadow" 
                 placeholder="Club Logo" 
                 name="club_logo">
-        </div>
       </div>
       <div class="form-group">
         <label for="mobileNumber">Club Contact</label>

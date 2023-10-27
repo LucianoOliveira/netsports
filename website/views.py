@@ -33,7 +33,7 @@ def home():
         club = Club.query.filter_by(email=current_user.email).first()
         if club:
             user_type = 'Club'
-            return render_template("club.html", user=current_user, type=user_type)
+            return render_template("club.html", club=club, user=current_user)
 
     return render_template("home.html", user=current_user, type=user_type)
 
@@ -258,6 +258,14 @@ def display_court_image(courtID):
         return redirect(url_for('static', filename='photos/courts/'+ courtID+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)    
+    
+@views.route('/display_club_image/<clubID>')
+def display_club_image(clubID):
+    filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/clubs/'+str(clubID)+'/main.jpg'
+    if os.path.isfile(filePath):
+        return redirect(url_for('static', filename='photos/clubs/'+ clubID+'/main.jpg'), code=301)
+    else:
+        return redirect(url_for('static', filename='photos/clubs/nophoto.jpg'), code=301)    
     
 
 @views.route('/court_detail/<courtID>')
