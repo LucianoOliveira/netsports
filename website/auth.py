@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from . import db, emailS
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import os
 # from flask_mail import Mail, Message
 # from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
@@ -121,6 +122,28 @@ def sign_up_club():
             db.session.commit()
             login_user(new_club, remember=True)
             # flash('Club signed up successfully', category='success')
+            # Submit da foto do court com o id new_court.id
+            image = request.files['club_logo']
+            if image:
+                # path = 'website/static/photos/clubs/'+str(new_court.id)+'/'
+                path = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/clubs/'+str(new_club.id)+'/'
+                pathRelative = 'static\\photos\\clubs\\'+str(new_club.id)+'\\'
+                filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/clubs/'+str(new_club.id)+'/main.jpg'
+                        
+                # Check if directory exists, if not, create it.
+                if os.path.exists(path) == False:
+                    print('Dir path not found')
+                    os.mkdir(path)
+                # Check if main.jpg exists, if exists delete it
+                if os.path.exists(filePath) == True:
+                    os.remove(filePath)
+                
+                # Upload image to directory
+                fileName = 'main.jpg'
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                newPath = os.path.join(basedir, pathRelative, fileName)
+                # image.save(newPath)
+                image.save(filePath)
             return redirect(url_for('views.club'))
 
 
