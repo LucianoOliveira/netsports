@@ -8,7 +8,6 @@ from datetime import datetime, date, timedelta
 views =  Blueprint('views', __name__)
 
 @views.route('/', methods=['GET', 'POST'])
-@login_required
 def home():
     if request.method == 'POST': 
         note = request.form.get('note')#Gets the note from the HTML 
@@ -20,18 +19,24 @@ def home():
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             # flash('Note added!', category='success')
-
-    user = User.query.filter_by(email=current_user.email).first()
-    user_type = user.user_type
-    if user.user_type == 'User':
-        dt = date.today()
-        min_dt = datetime.combine(dt, datetime.min.time())
-        open_matches = Match.query.filter(Match.date_match>=min_dt).order_by(Match.date_match.asc())
-        return render_template("home.html", user=current_user, type=user_type, matches=open_matches)
     else:
-        club = Club.query.filter_by(email=current_user.email).first()
-        if club:
-            return render_template("club.html", club=club, user=current_user)
+        if current_user.is_authenticated:
+            user = User.query.filter_by(email=current_user.email).first()
+            user_type = user.user_type
+            if user.user_type == 'User':
+                dt = date.today()
+                min_dt = datetime.combine(dt, datetime.min.time())
+                open_matches = Match.query.filter(Match.date_match>=min_dt).order_by(Match.date_match.asc())
+                return render_template("home.html", user=current_user, type=user_type, matches=open_matches)
+            else:
+                club = Club.query.filter_by(email=current_user.email).first()
+                if club:
+                    return render_template("club.html", club=club, user=current_user)
+        else:
+            dt = date.today()
+            min_dt = datetime.combine(dt, datetime.min.time())
+            open_matches = Match.query.filter(Match.date_match>=min_dt).order_by(Match.date_match.asc())
+            return render_template("index.html", user=current_user, matches=open_matches)
 
     return render_template("home.html", user=current_user, type=user_type)
 
