@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     mobileNumber = db.Column(db.Integer, unique=True)
+    user_type = db.Column(db.String(10)) #'User', 'Club', 'Admin'
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     birth_date = db.Column(db.Date)
@@ -50,7 +51,7 @@ class Court(db.Model):
     club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
     matches = db.relationship('Match')
 
-class Club(db.Model, UserMixin):
+class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     mobileNumber = db.Column(db.Integer, unique=True)

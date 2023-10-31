@@ -51,7 +51,7 @@
       <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
         <div class="brand-logo">
         {% if user.is_authenticated %}
-        {% if type=='User' %}  
+        {% if user.user_type=='User' %}  
         <a href="/">
           <!-- <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon"> -->
           <h5 class="logo-text">Net Sports</h5>
@@ -73,7 +73,7 @@
         <li class="sidebar-header">MAIN NAVIGATION</li>
         <li>
           {% if user.is_authenticated %}
-          {% if type=='User' %}  
+          {% if user.user_type=='User' %}  
           <a href="/">
             <i class="zmdi zmdi-view-dashboard"></i> <span>Home</span>
           </a>
@@ -158,7 +158,7 @@
         <li class="nav-item">
           <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
             {% if user.is_authenticated %}
-              {% if type=='User' %}
+              {% if user.user_type=='User' %}
               <span class="user-profile"><img src="{{ url_for('views.display_user_image', userID=user.id ) }}" class="img-circle" alt="user avatar"></span>
               {% else %}
               <span class="user-profile"><img src="{{ url_for('views.display_club_image', clubID=user.id ) }}" class="img-circle" alt="user avatar"></span>
@@ -171,7 +171,7 @@
             <li class="dropdown-item user-details">
             <a href="javaScript:void();">
                 {% if user.is_authenticated %}
-                  {% if type=='User' %}
+                  {% if user.user_type=='User' %}
                   <div class="media">
                     <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_user_image', userID=user.id ) }}" alt="user avatar"></div>
                   <div class="media-body">
@@ -181,10 +181,10 @@
                   </div>
                   {% else %}
                   <div class="media">
-                    <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_club_image', clubID=club.id ) }}" alt="user avatar"></div>
+                    <div class="avatar"><img class="align-self-start mr-3" src="{{ url_for('views.display_club_image', clubID=user.id ) }}" alt="user avatar"></div>
                   <div class="media-body">
-                  <h6 class="mt-2 user-title">{{ club.club_name }}</h6>
-                  <p class="user-subtitle">{{ club.email }}</p>
+                  <h6 class="mt-2 user-title">{{ user.first_name }}</h6>
+                  <p class="user-subtitle">{{ user.email }}</p>
                   </div>
                   </div>
                   {% endif %}
@@ -200,7 +200,7 @@
               </a>
             </li>
             {% if user.is_authenticated %}
-            {% if type=='User' %}
+            {% if user.user_type=='User' %}
             <li class="dropdown-divider"></li>
             <a id="userInfo" href="/userInfo"><li class="dropdown-item"><i class="zmdi zmdi-face mr-2"></i> User Informationt</li></a>
             <!-- <a class="nav-item nav-link" id="userInfo" href="/userInfo">User Information</a> -->

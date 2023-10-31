@@ -21,10 +21,9 @@ def home():
             db.session.commit()
             # flash('Note added!', category='success')
 
-    user_type = ''
     user = User.query.filter_by(email=current_user.email).first()
-    if user:
-        user_type = 'User'
+    user_type = user.user_type
+    if user.user_type == 'User':
         dt = date.today()
         min_dt = datetime.combine(dt, datetime.min.time())
         open_matches = Match.query.filter(Match.date_match>=min_dt).order_by(Match.date_match.asc())
@@ -32,7 +31,6 @@ def home():
     else:
         club = Club.query.filter_by(email=current_user.email).first()
         if club:
-            user_type = 'Club'
             return render_template("club.html", club=club, user=current_user)
 
     return render_template("home.html", user=current_user, type=user_type)
@@ -55,13 +53,13 @@ def club():
     if request.method == 'POST': 
         pass
     
-    currentClub = Club.query.filter_by(id=current_user.id).first()
+    currentClub = Club.query.filter_by(email=current_user.email).first()
     return render_template("club.html", club=currentClub, user=current_user)
 
 @views.route('/create_court', methods=['GET', 'POST'])
 @login_required
 def create_court():
-    club = Club.query.filter_by(id=current_user.id).first()
+    club = Club.query.filter_by(email=current_user.email).first()
     user_type = 'Club'
     if request.method == 'POST':
         court_name = request.form.get('court_name') 
