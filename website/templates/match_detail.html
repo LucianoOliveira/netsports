@@ -1,0 +1,127 @@
+{% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<div class="row">
+<div class="col-12 col-lg-12">
+    <div class="card">
+    <div class="card-header">Match Detail
+        <div class="card-action">
+        <div class="dropdown">
+            <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+            <i class="icon-options"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="{{ url_for('views.match_detail', matchID=match.id) }}">Delete Match</a>
+            </div>
+        </div>
+        </div>
+        <div class="table-responsive">
+        <table class="table align-items-center table-flush table-borderless">
+            <thead>
+            <tr>
+            <th>Date Time</th>
+            <th>Players</th>
+            <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for match in currentCourt.matches %}
+            <tr>
+                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.date_match }}</td>
+                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.num_player_enrolled }} / {{ match.num_player_total }}</td>                                      
+                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match_status }}</td>  
+                <td>
+                    <button type="button" class="close" onClick="deleteMatch({{ match.id }}, {{ currentCourt.id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </td>                    
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>  
+    </div>
+    </div>
+
+    <div class="card">
+    <div class="card-header">Players in Match
+        <div class="card-action">
+        <div class="dropdown">
+            <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+            <i class="icon-options"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="">Delete Match</a>
+            <a class="dropdown-item" href="">Cancel Match</a>
+            <a class="dropdown-item" href="">Send Notification</a>
+            </div>
+        </div>
+        </div>
+        <hr>
+        <form method="POST">
+            {%for i in range(0, len)%}
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!-- <label for="form_name">Name</label> -->
+                        <input id="player_name" type="text" name="player_name" class="form-control" placeholder="Player Name" required="required">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <!-- <label for="form_email">Contact</label> -->
+                        <input id="player_contact" type="tel" name="player_contact" class="form-control" placeholder="Player Contact">
+                    </div>
+                </div>
+                <!-- <div class="col-sm-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
+                        <label class="form-check-label" for="player_registered">
+                          Player Registered
+                        </label>
+                      </div>
+                </div> -->
+            </div>
+            <hr>
+            {%endfor%} 
+            <div class="form-group row">
+                <!-- <label class="col-lg-3 col-form-label form-control-label"></label> -->
+                <div class="col-lg-12">
+                    <!-- <input type="reset" class="btn btn-secondary" value="Cancel"> -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+            {%for player in players_name%}
+            <div>{{ player }}</div>
+            {%endfor%} 
+            {%for player in players_name_phone%}
+            <div>{{ player }}</div>
+            {%endfor%} 
+            {%for player in all_players_obj%}
+            <div>{{ player }}</div>
+            {%endfor%} 
+        </form>
+
+    </div>
+    </div>
+
+
+    
+</div>
+</div><!--End Row-->
+
+<script> 
+    $( function() { 
+      var availablePlayers = [ 
+          {% for player in list_players %} 
+              "{{player}}", 
+          {% endfor %} 
+      ]; 
+      $( "#player_name" ).autocomplete({ 
+        source: availablePlayers 
+      }); 
+    } ); 
+    </script> 
+{% endblock %}

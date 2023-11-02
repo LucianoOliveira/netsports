@@ -289,13 +289,49 @@ def court_details(courtID):
 @login_required
 def match_detail(matchID):
     current_Match = Match.query.filter_by(id=matchID).first()
-    pass
-    # return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court) 
+    current_Court = Court.query.filter(Court.id==current_Match.court_id).first()
+
+    len = current_Match.num_player_total
+    match_status = ''
+    if current_Match.match_status == 0:
+        match_status='Cancelled'
+    elif current_Match.match_status == 1:
+        match_status='Announced'
+    elif current_Match.match_status == 2:
+        match_status='Accepting Players'  
+    elif current_Match.match_status == 3:
+        match_status='Full'
+    elif current_Match.match_status == 4:
+        match_status='Being Played'
+    elif current_Match.match_status == 5:
+        match_status='Ended'
+    else:
+        pass          
+    
+    # Get players already in game
+    # get list of ids of players already in game
+    # use the not_in() function inside the filter to exclude those ids from the search of players for autocomlete
+
+    # Get players and contact for autocomplete
+    all_players_obj = User.query.filter(User.ustatus=='V', User.user_type=='User').all()
+    players_name_phone = User.query.with_entities(User.first_name, User.mobileNumber).filter(User.ustatus=='V', User.user_type=='User').all()
+    players_name = User.query.with_entities(User.first_name).filter(User.ustatus=='V', User.user_type=='User').all()
+    list_players = []
+    for player in all_players_obj:
+        list_players.append(player.first_name)
+
+
+    return render_template("match_detail.html", user=current_user, match=current_Match, currentCourt=current_Court, len=len, match_status=match_status, list_players=list_players) 
 
 @views.route('/testing')
 def testing():
     # return 'test correct'
     return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)
+
+@views.route('/paises', methods=['GET'])
+def paises():
+    paises = ["COLOMBIA", "MEXICO", "NICARAGUA", "BRASIL", "ARGENTINA", "PERU", "GUATEMALA"]
+    return jsonify({"paises":paises})
 
 def exampleFunctions(itemID):
         return 'tests correct' + str(itemID)
