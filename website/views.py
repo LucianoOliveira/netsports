@@ -320,8 +320,12 @@ def match_detail(matchID):
     for player in all_players_obj:
         list_players.append(player.first_name)
 
+    multiarray = []
+    for player in all_players_obj:
+        new_player = {"name": player.first_name, "contact": player.mobileNumber}
+        multiarray.append(new_player)
 
-    return render_template("match_detail.html", user=current_user, match=current_Match, currentCourt=current_Court, len=len, match_status=match_status, list_players=list_players) 
+    return render_template("match_detail.html", user=current_user, match=current_Match, currentCourt=current_Court, len=len, match_status=match_status, list_players=list_players, multiarray=multiarray) 
 
 @views.route('/testing')
 def testing():

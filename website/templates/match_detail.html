@@ -66,13 +66,13 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <!-- <label for="form_name">Name</label> -->
-                        <input id="player_name" type="text" name="player_name" class="form-control" placeholder="Player Name" required="required">
+                        <input id="player_name{{i}}" type="text" name="player_name{{i}}" class="form-control" placeholder="Player Name" required="required" onChange="changePlayerName{{i}}()">
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <!-- <label for="form_email">Contact</label> -->
-                        <input id="player_contact" type="tel" name="player_contact" class="form-control" placeholder="Player Contact">
+                        <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
                     </div>
                 </div>
                 <!-- <div class="col-sm-4">
@@ -119,9 +119,29 @@
               "{{player}}", 
           {% endfor %} 
       ]; 
-      $( "#player_name" ).autocomplete({ 
+      {%for i in range(0, len)%}
+      $( "#player_name{{i}}" ).autocomplete({ 
         source: availablePlayers 
       }); 
+      {%endfor%}
     } ); 
-    </script> 
+</script> 
+<script>
+    {%for i in range(0, len)%}
+    function changePlayerName{{i}}() {
+      var playerName = document.getElementById('player_name{{i}}').value
+      mobilePhone = ''
+      if (playerName != '')
+      {
+        {% for element in multiarray %} 
+            if (playerName == "{{element.name}}"){
+                var mobilePhone = "{{element.contact}}";
+            }    
+        {% endfor %}
+      }  
+      document.getElementById('player_contact{{i}}').value = mobilePhone;
+    }
+    changePlayerName{{i}}()
+    {%endfor%}
+</script>
 {% endblock %}
