@@ -252,7 +252,7 @@ def userInfo():
 def display_user_image(userID):
     filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/users/'+str(userID)+'/main.jpg'
     if os.path.isfile(filePath):
-        return redirect(url_for('static', filename='photos/users/'+ userID+'/main.jpg'), code=301)
+        return redirect(url_for('static', filename='photos/users/'+ str(userID)+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/users/nophoto.jpg'), code=301)
     
@@ -260,7 +260,7 @@ def display_user_image(userID):
 def display_court_image(courtID):
     filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/courts/'+str(courtID)+'/main.jpg'
     if os.path.isfile(filePath):
-        return redirect(url_for('static', filename='photos/courts/'+ courtID+'/main.jpg'), code=301)
+        return redirect(url_for('static', filename='photos/courts/'+ str(courtID)+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/courts/nophoto.jpg'), code=301)    
     
@@ -271,6 +271,18 @@ def display_club_image(clubID):
         return redirect(url_for('static', filename='photos/clubs/'+ clubID+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/clubs/nophoto.jpg'), code=301)    
+
+
+@views.route('/display_club_image_fromCourt/<courtID>')
+def display_club_image_fromCourt(courtID):
+    current_Court = Court.query.filter_by(id=courtID).first()
+    clubID = current_Court.club_id
+    filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/clubs/'+str(clubID)+'/main.jpg'
+    if os.path.isfile(filePath):
+        return redirect(url_for('static', filename='photos/clubs/'+str(clubID)+'/main.jpg'), code=301)
+    else:
+        return redirect(url_for('static', filename='photos/clubs/nophoto.jpg'), code=301) 
+          
     
 
 @views.route('/court_detail/<courtID>')

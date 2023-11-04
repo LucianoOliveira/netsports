@@ -1,30 +1,87 @@
 {% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
 {% block content %}
-<div class="table-responsive">
-  <table class="table align-items-center table-flush table-borderless">
-      <thead>
-      <tr>
-      <!-- <th>ID</th> -->
-      <th>Club</th>
-      <th>Court</th>
-      <th>Date Time</th>
-      <th>Players</th>
-      <th>Status</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for match in matches %}
-      <!-- <tr onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';"> -->
-      <tr>
-          <!-- <td>{{ match.id }}</td> -->
-          <td>{{ getClubNameFromCourt(match.court_id) }}</td>
-          <td>{{ getCourtNameFromCourtID(match.court_id) }}</td>
-          <td>{{ match.date_match }}</td>
-          <td>{{ match.num_player_enrolled }} / {{ match.num_player_total }}</td>                      
-          <td>{{ getStatusFromStatusID(match.match_status) }}</td>  
-      </tr>
-      {% endfor %}
-      </tbody>
-  </table>
+<!-- New design for games -->
+
+<div class="row">
+  {% for match in matches %}
+  <div class="col-7 col-sm-5 col-md-4 col-lg-3">
+     <div class="card profile-card-2">
+      <div class="card-img-block">
+          <!-- <img class="img-fluid" src="https://via.placeholder.com/800x500" alt="Card image cap"> -->
+          <img class="img-fluid" src="{{ url_for('views.display_court_image', courtID=match.court_id ) }}" alt="Card image cap">
+      </div>
+      <div class="card-body pt-5">
+          <!-- <img src="https://via.placeholder.com/110x110" alt="profile-image" class="profile"> -->
+          <img src="{{ url_for('views.display_club_image_fromCourt', courtID=match.court_id ) }}" alt="profile-image" class="profile">
+          <h5 class="card-title">{{ getClubNameFromCourt(match.court_id) }}, {{ getCourtNameFromCourtID(match.court_id) }}</h5>
+          <h6 class="card-subtitle">{{ match.date_match }}</h6>
+          <p></p>
+          <p class="card-text">{{ getStatusFromStatusID(match.match_status) }}</p>
+          <p class="card-text">{{ match.num_player_enrolled }} / {{ match.num_player_total }}</p>
+          <!-- <div class="icon-block">
+            <a href="javascript:void();"><i class="fa fa-facebook bg-facebook text-white"></i></a>
+            <a href="javascript:void();"> <i class="fa fa-twitter bg-twitter text-white"></i></a>
+            <a href="javascript:void();"> <i class="fa fa-google-plus bg-google-plus text-white"></i></a>
+          </div> -->
+      </div>
+
+      <!-- <div class="card-body border-top border-light">
+           <div class="media align-items-center">
+             <div>
+                 <img src="assets/images/timeline/html5.svg" class="skill-img" alt="skill img">
+             </div>
+               <div class="media-body text-left ml-3">
+                 <div class="progress-wrapper">
+                   <p>HTML5 <span class="float-right">65%</span></p>
+                   <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" style="width:65%"></div>
+                   </div>
+                  </div>                   
+              </div>
+            </div>
+            <hr>
+            <div class="media align-items-center">
+             <div><img src="assets/images/timeline/bootstrap-4.svg" class="skill-img" alt="skill img"></div>
+               <div class="media-body text-left ml-3">
+                 <div class="progress-wrapper">
+                   <p>Bootstrap 4 <span class="float-right">50%</span></p>
+                   <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" style="width:50%"></div>
+                   </div>
+                  </div>                   
+              </div>
+            </div>
+             <hr>
+            <div class="media align-items-center">
+             <div><img src="assets/images/timeline/angular-icon.svg" class="skill-img" alt="skill img"></div>
+               <div class="media-body text-left ml-3">
+                 <div class="progress-wrapper">
+                   <p>AngularJS <span class="float-right">70%</span></p>
+                   <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" style="width:70%"></div>
+                   </div>
+                  </div>                   
+              </div>
+            </div>
+              <hr>
+            <div class="media align-items-center">
+             <div><img src="assets/images/timeline/react.svg" class="skill-img" alt="skill img"></div>
+               <div class="media-body text-left ml-3">
+                 <div class="progress-wrapper">
+                   <p>React JS <span class="float-right">35%</span></p>
+                   <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" style="width:35%"></div>
+                   </div>
+                  </div>                   
+              </div>
+            </div>
+            
+        </div> -->
   </div>
+
+  </div>
+  {% endfor %} 
+</div>
+
+
 {% endblock %}
