@@ -61,31 +61,141 @@
         </div>
         <hr>
         <form method="POST">
-            {%for i in range(0, len)%}
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <!-- <label for="form_name">Name</label> -->
-                        <input id="player_name{{i}}" type="text" name="player_name{{i}}" class="form-control" placeholder="Player Name" required="required" onChange="changePlayerName{{i}}()">
+            {% if playersRegistered %}
+                {% set ns = namespace(players=0) %}
+                {% set i = 0 %}
+                {% for pr in playersRegistered %}
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_name">Name</label> -->
+                                <input 
+                                    id="player_name{{ns.players}}" 
+                                    type="text" 
+                                    name="player_name{{ns.players}}" 
+                                    class="form-control" 
+                                    placeholder="Player Name" 
+                                    value = "{{ pr.first_name }}" 
+                                    onChange="changePlayerName{{ns.players}}()">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_email">Contact</label> -->
+                                <input 
+                                    id="player_contact{{ns.players}}" 
+                                    type="tel" 
+                                    name="player_contact{{ns.players}}" 
+                                    class="form-control" 
+                                    value = "{{ pr.mobileNumber }}" 
+                                    placeholder="Player Contact">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_email">Contact</label> -->
+                                <input 
+                                    id="player_id{{ns.players}}" 
+                                    type="hidden" 
+                                    name="player_id{{ns.players}}"
+                                    value = "{{ pr.id }}"  
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
+                                <label class="form-check-label" for="player_registered">
+                                Player Registered
+                                </label>
+                            </div>
+                        </div> -->
                     </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <!-- <label for="form_email">Contact</label> -->
-                        <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
+                    <hr>
+                    {% set ns.players = ns.players + 1 %}
+                {% endfor %}
+                {% set i = ns.players %}
+                {% if i < len %}
+                    {% set x = i %}
+                    {% set i = 0 %}
+                    {%for i in range(x, len)%}
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_name">Name</label> -->
+                                <input 
+                                    id="player_name{{i}}" 
+                                    type="text" 
+                                    name="player_name{{i}}" 
+                                    class="form-control" 
+                                    placeholder="Player Name" 
+                                    onChange="changePlayerName{{i}}()">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_email">Contact</label> -->
+                                <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <!-- <label for="form_email">Contact</label> -->
+                                <input id="player_id{{i}}" type="hidden" name="player_id{{i}}" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
+                                <label class="form-check-label" for="player_registered">
+                                Player Registered
+                                </label>
+                            </div>
+                        </div> -->
                     </div>
+                    <hr>
+                    {%endfor%}
+                {% endif%}
+            {% else %}
+                {%for i in range(0, len)%}
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <!-- <label for="form_name">Name</label> -->
+                            <input 
+                                id="player_name{{i}}" 
+                                type="text" 
+                                name="player_name{{i}}" 
+                                class="form-control" 
+                                placeholder="Player Name" 
+                                onChange="changePlayerName{{i}}()">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <!-- <label for="form_email">Contact</label> -->
+                            <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <!-- <label for="form_email">Contact</label> -->
+                            <input id="player_id{{i}}" type="hidden" name="player_id{{i}}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <!-- <div class="col-sm-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
+                            <label class="form-check-label" for="player_registered">
+                            Player Registered
+                            </label>
+                        </div>
+                    </div> -->
                 </div>
-                <!-- <div class="col-sm-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
-                        <label class="form-check-label" for="player_registered">
-                          Player Registered
-                        </label>
-                      </div>
-                </div> -->
-            </div>
-            <hr>
-            {%endfor%} 
+                <hr>
+                {%endfor%} 
+            {% endif %}
             <div class="form-group row">
                 <!-- <label class="col-lg-3 col-form-label form-control-label"></label> -->
                 <div class="col-lg-12">
@@ -131,15 +241,18 @@
     function changePlayerName{{i}}() {
       var playerName = document.getElementById('player_name{{i}}').value
       mobilePhone = ''
+      playerID = 0
       if (playerName != '')
       {
         {% for element in multiarray %} 
             if (playerName == "{{element.name}}"){
                 var mobilePhone = "{{element.contact}}";
+                var playerID = "{{element.id}}";
             }    
         {% endfor %}
       }  
       document.getElementById('player_contact{{i}}').value = mobilePhone;
+      document.getElementById('player_id{{i}}').value = playerID;
     }
     changePlayerName{{i}}()
     {%endfor%}

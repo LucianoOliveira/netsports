@@ -64,3 +64,8 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_code = db.Column(db.String(3)) 
     category_desc = db.Column(db.String(150))
+
+class MatchPlayer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    idMatch = db.Column(db.Integer, db.ForeignKey('match.id'))
+    idPlayer = db.Column(db.Integer, db.ForeignKey('user.id'))

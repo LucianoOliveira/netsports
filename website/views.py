@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, User, Court, Club, Match
+from .models import Note, User, Court, Club, Match, MatchPlayer
 from . import db
 import json, os
 from datetime import datetime, date, timedelta
@@ -285,47 +285,106 @@ def court_details(courtID):
     print('Hello from court_details '+str(courtID))
     return 8
 
-@views.route('/match_detail/<matchID>')
+@views.route('/match_detail/<matchID>', methods=['GET', 'POST'])
 @login_required
 def match_detail(matchID):
-    current_Match = Match.query.filter_by(id=matchID).first()
-    current_Court = Court.query.filter(Court.id==current_Match.court_id).first()
+    if request.method == 'GET':
+        current_Match = Match.query.filter_by(id=matchID).first()
+        current_Court = Court.query.filter(Court.id==current_Match.court_id).first()
+        matchID = current_Match.id
 
-    len = current_Match.num_player_total
-    match_status = ''
-    if current_Match.match_status == 0:
-        match_status='Cancelled'
-    elif current_Match.match_status == 1:
-        match_status='Announced'
-    elif current_Match.match_status == 2:
-        match_status='Accepting Players'  
-    elif current_Match.match_status == 3:
-        match_status='Full'
-    elif current_Match.match_status == 4:
-        match_status='Being Played'
-    elif current_Match.match_status == 5:
-        match_status='Ended'
-    else:
-        pass          
+        len = current_Match.num_player_total
+        match_status = ''
+        if current_Match.match_status == 0:
+            match_status='Cancelled'
+        elif current_Match.match_status == 1:
+            match_status='Announced'
+        elif current_Match.match_status == 2:
+            match_status='Accepting Players'  
+        elif current_Match.match_status == 3:
+            match_status='Full'
+        elif current_Match.match_status == 4:
+            match_status='Being Played'
+        elif current_Match.match_status == 5:
+            match_status='Ended'
+        else:
+            pass  
+
+        #all_players_list =  MatchPlayer.query.with_entities(MatchPlayer.idPlayer).filter(MatchPlayer.idMatch==current_Match.id).all()
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+
     
+    elif request.method == 'POST':
+        current_Match = Match.query.filter_by(id=matchID).first()
+        current_Court = Court.query.filter(Court.id==current_Match.court_id).first()
+        matchID = current_Match.id
+        len = current_Match.num_player_total
+        match_status = ''
+        if current_Match.match_status == 0:
+            match_status='Cancelled'
+        elif current_Match.match_status == 1:
+            match_status='Announced'
+        elif current_Match.match_status == 2:
+            match_status='Accepting Players'  
+        elif current_Match.match_status == 3:
+            match_status='Full'
+        elif current_Match.match_status == 4:
+            match_status='Being Played'
+        elif current_Match.match_status == 5:
+            match_status='Ended'
+        else:
+            pass  
+
+        
+        # delete every record in MatchPlayers where matchID is that one
+        # write new players for the matchid
+        mps = MatchPlayer.query.filter(MatchPlayer.idMatch == matchID).all()
+        if mps:
+            for mp in mps:
+                mp.idPlayer = 0
+                db.session.commit()  
+            i = 0
+            for mp in mps:
+                player_id = request.form.get('player_id'+str(i))  
+                if  (player_id != '0' and player_id != ' ') and matchID>0:
+                    mp.idPlayer = player_id
+                    db.session.commit() 
+                i = i + 1
+        else:
+            for i in range(0, len):
+                player_id = request.form.get('player_id'+str(i))
+                if  matchID>0:
+                    new_match_player = MatchPlayer(idMatch=matchID, idPlayer=player_id)
+                    db.session.add(new_match_player)
+                    db.session.commit()
+
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+
+
+    mps = MatchPlayer.query.filter(MatchPlayer.idMatch == matchID).all() 
+    match_players_list = []
+    for mp in mps:
+        player = User.query.filter(User.id == mp.idPlayer).first()  
+        if player:
+            new_item = {"name": player.first_name, "contact": player.mobileNumber, "id": player.id}  
+            match_players_list.append(new_item)   
     # Get players already in game
     # get list of ids of players already in game
     # use the not_in() function inside the filter to exclude those ids from the search of players for autocomlete
 
     # Get players and contact for autocomplete
     all_players_obj = User.query.filter(User.ustatus=='V', User.user_type=='User').all()
-    players_name_phone = User.query.with_entities(User.first_name, User.mobileNumber).filter(User.ustatus=='V', User.user_type=='User').all()
-    players_name = User.query.with_entities(User.first_name).filter(User.ustatus=='V', User.user_type=='User').all()
     list_players = []
     for player in all_players_obj:
         list_players.append(player.first_name)
 
     multiarray = []
     for player in all_players_obj:
-        new_player = {"name": player.first_name, "contact": player.mobileNumber}
+        new_player = {"name": player.first_name, "contact": player.mobileNumber, "id": player.id}
         multiarray.append(new_player)
 
-    return render_template("match_detail.html", user=current_user, match=current_Match, currentCourt=current_Court, len=len, match_status=match_status, list_players=list_players, multiarray=multiarray) 
+    return render_template("match_detail.html", user=current_user, match=current_Match, currentCourt=current_Court, len=len, match_status=match_status, list_players=list_players, multiarray=multiarray, playersRegistered=playersRegistered) 
+
 
 @views.route('/testing')
 def testing():
@@ -339,3 +398,8 @@ def paises():
 
 def exampleFunctions(itemID):
         return 'tests correct' + str(itemID)
+
+
+# with entities examples
+# players_name_phone = User.query.with_entities(User.first_name, User.mobileNumber).filter(User.ustatus=='V', User.user_type=='User').all()
+# players_name = User.query.with_entities(User.first_name).filter(User.ustatus=='V', User.user_type=='User').all()
