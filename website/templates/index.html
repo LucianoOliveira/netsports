@@ -21,7 +21,7 @@
           <td>{{ getCourtNameFromCourtID(match.court_id) }}</td>
           <td>{{ match.date_match }}</td>
           <td>{{ match.num_player_enrolled }} / {{ match.num_player_total }}</td>                      
-          <td>{{ match.match_status }}</td>  
+          <td>{{ getStatusFromStatusID(match.match_status) }}</td>  
       </tr>
       {% endfor %}
       </tbody>

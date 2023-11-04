@@ -143,5 +143,24 @@ def create_app():
         else:
             court_name = 'No name'
         return court_name
+    
+    @app.template_global('getStatusFromStatusID')
+    def getStatusFromStatusID(statusID):   
+        match_status = ''
+        if statusID == 0:
+            match_status='Cancelled'
+        elif statusID == 1:
+            match_status='Announced'
+        elif statusID == 2:
+            match_status='Accepting Players'  
+        elif statusID == 3:
+            match_status='Full'
+        elif statusID == 4:
+            match_status='Being Played'
+        elif statusID == 5:
+            match_status='Ended'
+        else:
+            pass  
+        return match_status
 
     return app
