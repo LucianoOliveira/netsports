@@ -245,7 +245,7 @@
       if (playerName != '')
       {
         {% for element in multiarray %} 
-            if (playerName == "{{element.name}}"){
+            if (playerName.toLowerCase() == "{{element.name}}".toLowerCase()){
                 var mobilePhone = "{{element.contact}}";
                 var playerID = "{{element.id}}";
             }    
