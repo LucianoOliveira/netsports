@@ -275,13 +275,31 @@ def display_club_image(clubID):
 
 @views.route('/display_club_image_fromCourt/<courtID>')
 def display_club_image_fromCourt(courtID):
-    current_Court = Court.query.filter_by(id=courtID).first()
+    current_Court = Court.query.filter(Court.id==courtID).first()
     clubID = current_Court.club_id
     filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/clubs/'+str(clubID)+'/main.jpg'
     if os.path.isfile(filePath):
         return redirect(url_for('static', filename='photos/clubs/'+str(clubID)+'/main.jpg'), code=301)
     else:
         return redirect(url_for('static', filename='photos/clubs/nophoto.jpg'), code=301) 
+    
+@views.route('/display_player_in_match/<matchID>,<ind>')
+def display_player_in_match(matchID, ind):
+    current_Match = Match.query.filter_by(id=matchID).first()
+    playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+    i = 0
+    playerId = 0
+    if playersRegistered:
+        for rp in playersRegistered:
+            if str(i) == str(ind):
+                playerId = rp.id
+            i = i + 1
+    
+    filePath = str(os.path.abspath(os.path.dirname(__file__)))+'/static/photos/users/'+str(playerId)+'/main.jpg'
+    if os.path.isfile(filePath):
+        return redirect(url_for('static', filename='photos/users/'+ str(playerId)+'/main.jpg'), code=301)
+    else:
+        return redirect(url_for('static', filename='photos/users/nophoto.jpg'), code=301)    
           
     
 
@@ -331,6 +349,47 @@ def match_detail(matchID):
         current_Court = Court.query.filter(Court.id==current_Match.court_id).first()
         matchID = current_Match.id
         len = current_Match.num_player_total
+          
+
+        # update number of players registered in match to 0 to be updated later
+        current_Match.num_player_enrolled = 0
+        db.session.commit()
+        # delete every record in MatchPlayers where matchID is that one
+        # write new players for the matchid
+        mps = MatchPlayer.query.filter(MatchPlayer.idMatch == matchID).all()
+        if mps:
+            for mp in mps:
+                mp.idPlayer = 0
+                db.session.commit()  
+            i = 0
+            x = 0
+            for mp in mps:
+                player_id = request.form.get('player_id'+str(i))  
+                if  (player_id != '0' and player_id != ' ') and matchID>0:
+                    mp.idPlayer = player_id
+                    db.session.commit() 
+                    x = x +1
+                i = i + 1
+        else:
+            x = 0
+            for i in range(0, len):
+                player_id = request.form.get('player_id'+str(i))
+                if  matchID>0:
+                    if (player_id != '0' and player_id != ' '):
+                        x = x + 1
+                    new_match_player = MatchPlayer(idMatch=matchID, idPlayer=player_id)
+                    db.session.add(new_match_player)
+                    db.session.commit()
+
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+        # update number of players X registered in match
+        current_Match.num_player_enrolled = x
+        if (current_Match.num_player_enrolled == current_Match.num_player_total):
+            current_Match.match_status = 3
+        if (current_Match.num_player_enrolled < current_Match.num_player_total and current_Match.match_status == 3): 
+            current_Match.match_status = 2 
+        db.session.commit()
+
         match_status = ''
         if current_Match.match_status == 0:
             match_status='Cancelled'
@@ -345,32 +404,8 @@ def match_detail(matchID):
         elif current_Match.match_status == 5:
             match_status='Ended'
         else:
-            pass  
+            pass
 
-        
-        # delete every record in MatchPlayers where matchID is that one
-        # write new players for the matchid
-        mps = MatchPlayer.query.filter(MatchPlayer.idMatch == matchID).all()
-        if mps:
-            for mp in mps:
-                mp.idPlayer = 0
-                db.session.commit()  
-            i = 0
-            for mp in mps:
-                player_id = request.form.get('player_id'+str(i))  
-                if  (player_id != '0' and player_id != ' ') and matchID>0:
-                    mp.idPlayer = player_id
-                    db.session.commit() 
-                i = i + 1
-        else:
-            for i in range(0, len):
-                player_id = request.form.get('player_id'+str(i))
-                if  matchID>0:
-                    new_match_player = MatchPlayer(idMatch=matchID, idPlayer=player_id)
-                    db.session.add(new_match_player)
-                    db.session.commit()
-
-        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
 
 
     mps = MatchPlayer.query.filter(MatchPlayer.idMatch == matchID).all() 

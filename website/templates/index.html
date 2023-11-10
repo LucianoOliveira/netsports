@@ -25,58 +25,27 @@
           </div> -->
       </div>
 
-      <!-- <div class="card-body border-top border-light">
-           <div class="media align-items-center">
-             <div>
-                 <img src="assets/images/timeline/html5.svg" class="skill-img" alt="skill img">
-             </div>
-               <div class="media-body text-left ml-3">
-                 <div class="progress-wrapper">
-                   <p>HTML5 <span class="float-right">65%</span></p>
-                   <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" style="width:65%"></div>
-                   </div>
-                  </div>                   
-              </div>
-            </div>
-            <hr>
+     
+      <div class="card-body border-top border-light">
+          {% if match.num_player_enrolled>0 %}
+            {%for i in range(0, match.num_player_total)%}
             <div class="media align-items-center">
-             <div><img src="assets/images/timeline/bootstrap-4.svg" class="skill-img" alt="skill img"></div>
-               <div class="media-body text-left ml-3">
-                 <div class="progress-wrapper">
-                   <p>Bootstrap 4 <span class="float-right">50%</span></p>
-                   <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" style="width:50%"></div>
-                   </div>
-                  </div>                   
+              <div>
+                  <img src="{{ url_for('views.display_player_in_match', matchID=match.id, ind=i ) }}" class="skill-img" alt="skill img">
               </div>
-            </div>
-             <hr>
-            <div class="media align-items-center">
-             <div><img src="assets/images/timeline/angular-icon.svg" class="skill-img" alt="skill img"></div>
-               <div class="media-body text-left ml-3">
-                 <div class="progress-wrapper">
-                   <p>AngularJS <span class="float-right">70%</span></p>
-                   <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" style="width:70%"></div>
-                   </div>
-                  </div>                   
+                <div class="media-body text-left ml-3">
+                  <div class="progress-wrapper">
+                    <p>{{ getPlayerNameFromMatchInd(match.id, i) }} <span class="float-right">{{ getPlayerELOFromMatchInd(match.id, i) }}</span></p>
+                    <div class="progress" style="height: 5px;">
+                      <div class="progress-bar" style="width:{{ getPlayerELOPercFromMatchInd(match.id, i) }}%"></div>
+                    </div>
+                    </div>                   
+                </div>
               </div>
-            </div>
               <hr>
-            <div class="media align-items-center">
-             <div><img src="assets/images/timeline/react.svg" class="skill-img" alt="skill img"></div>
-               <div class="media-body text-left ml-3">
-                 <div class="progress-wrapper">
-                   <p>React JS <span class="float-right">35%</span></p>
-                   <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" style="width:35%"></div>
-                   </div>
-                  </div>                   
-              </div>
-            </div>
-            
-        </div> -->
+            {% endfor %}  
+          {% endif %}                      
+        </div>
   </div>
 
   </div>

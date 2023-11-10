@@ -35,7 +35,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/') 
 
-    from .models import User, Note, Court, Match, Club
+    from .models import User, Note, Court, Match, Club, MatchPlayer
     from datetime import date
     from datetime import datetime, timedelta
     from sqlalchemy.sql import func
@@ -162,5 +162,47 @@ def create_app():
         else:
             pass  
         return match_status
+    
+    @app.template_global('getPlayerNameFromMatchInd')
+    def getPlayerNameFromMatchInd(matchID, ind):   
+        current_Match = Match.query.filter_by(id=matchID).first()
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+        i = 0
+        playerName = ""
+        if playersRegistered:
+            for rp in playersRegistered:          
+                if str(i) == str(ind):
+                    playerName = rp.first_name
+                i = i + 1
+        return playerName
+    
+    @app.template_global('getPlayerELOFromMatchInd')
+    def getPlayerELOFromMatchInd(matchID, ind):   
+        current_Match = Match.query.filter_by(id=matchID).first()
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+        i = 0
+        playerELO = 0
+        if playersRegistered:
+            for rp in playersRegistered:          
+                if str(i) == str(ind):
+                    playerELO = 1000
+                i = i + 1
+        return playerELO
+    
+    @app.template_global('getPlayerELOPercFromMatchInd')
+    def getPlayerELOPercFromMatchInd(matchID, ind):   
+        current_Match = Match.query.filter_by(id=matchID).first()
+        playersRegistered = User.query.join(MatchPlayer, MatchPlayer.idPlayer == User.id).filter(MatchPlayer.idMatch==current_Match.id).all()
+        i = 0
+        playerELOPerc = 0
+        if playersRegistered:
+            for rp in playersRegistered:          
+                if str(i) == str(ind):
+                    playerELOPerc = 1000
+                i = i + 1
+
+        playerELOPerc = (playerELOPerc*50)/1000 
+                     
+        return playerELOPerc
 
     return app
