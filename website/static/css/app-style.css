@@ -726,7 +726,9 @@ body.bg-theme15 {
  
 .skill-img{
   border-radius: 50%;
+  object-fit: cover;
   height: 35px;
+  width: 35px;
  }
 
 .page-title{
@@ -835,9 +837,11 @@ body.bg-theme15 {
 .profile-card-2 .profile {
   border-radius: 50%;
   position: absolute;
+  object-fit: cover;
   top: -42px;
   left: 15%;
-  max-width: 75px;
+  width: 75px;
+  height: 75px;
   border: 3px solid rgba(255, 255, 255, 1);
   -webkit-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
