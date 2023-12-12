@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Note, User, Court, Club, Match, MatchPlayer
+from .models import Note, User, Court, Club, Match, MatchPlayer, NonStop
 from . import db
 import json, os
 from datetime import datetime, date, timedelta
@@ -60,6 +60,54 @@ def club():
     
     currentClub = Club.query.filter_by(email=current_user.email).first()
     return render_template("club.html", club=currentClub, user=current_user)
+
+@views.route('/nonStop', methods=['GET', 'POST'])
+@login_required
+def nonStop():
+    if request.method == 'POST': 
+        date_NonStop = datetime.strptime( request.form.get('date_NonStop'), '%Y-%m-%dT%H:%M') 
+        nonStop_duration = request.form.get('nonStop_duration') 
+        nonStop_warmUp = request.form.get('nonStop_warmUp') 
+        nonStop_halftime = request.form.get('nonStop_halftime') 
+        nonStop_type = request.form.get('nonStop_type') 
+        court_id = courtID
+        num_player_total = request.form.get('num_player_total') 
+        num_player_enrolled = num_player_total 
+        nonStop_status = request.form.get('nonStop_status') 
+
+        namePlayerA1 = request.form.get('namePlayerA1') 
+        namePlayerA2 = request.form.get('namePlayerA2') 
+        namePlayerB1 = request.form.get('namePlayerB1') 
+        namePlayerB2 = request.form.get('namePlayerB2') 
+        namePlayerC1 = request.form.get('namePlayerC1') 
+        namePlayerC2 = request.form.get('namePlayerC2') 
+        namePlayerD1 = request.form.get('namePlayerD1') 
+        namePlayerD2 = request.form.get('namePlayerD2')
+
+        # check if there already is a match for the same court at the same time
+        date_start = date_NonStop
+        date_end = date_start + timedelta(minutes = int(nonStop_duration))
+        matches = Match.query.filter(Match.court_id==court_id).all()
+        overlap = ''
+        for match in matches:
+            existingMatchEndTime = match.date_match + timedelta(minutes = int(match.match_duration))
+            if (date_start>=match.date_match and date_start<=existingMatchEndTime) or (date_end>=match.date_match and date_end<=existingMatchEndTime):
+                overlap = 'yes'
+        # otherMatch = Match.query.filter(Match.date_match>=date_start, Match.date_match<=date_end, Match.court_id==court_id).all()
+        if overlap=='yes':
+            flash('There is already a match occuring in that slot.', category='error')
+        else:
+            if courtID:
+                new_NonStop = NonStop(date_NonStop=date_NonStop, nonStop_duration=nonStop_duration, nonStop_warmUp=nonStop_warmUp, nonStop_halftime=nonStop_halftime, nonStop_type=nonStop_type, num_player_total=num_player_total, num_player_enrolled=num_player_enrolled, nonStop_status=nonStop_status, namePlayerA1=namePlayerA1, namePlayerA2=namePlayerA2, namePlayerB1=namePlayerB1, namePlayerB2=namePlayerB2, namePlayerC1=namePlayerC1, namePlayerC2=namePlayerC2, namePlayerD1=namePlayerD1, namePlayerD2=namePlayerD2)
+                db.session.add(new_NonStop) #add new NonStop
+                db.session.commit() 
+                current_Court = Court.query.filter_by(id=courtID).first()
+                # return render_template("court_detail.html", court=courtID, user=current_user, currentCourt=current_Court)    
+            
+                return redirect(url_for('views.court_detail', courtID=courtID, type='Club'))
+    
+    currentClub = Club.query.filter_by(email=current_user.email).first()
+    return render_template("nonStop.html", club=currentClub, user=current_user)    
 
 @views.route('/create_court', methods=['GET', 'POST'])
 @login_required
@@ -364,6 +412,11 @@ def match_detail(matchID):
             i = 0
             x = 0
             for mp in mps:
+                #Check if name+mobile+id correspond
+                #if so simple write
+                #if dont correspond
+                    #if mobile already exists get id from that
+                #if mobile not yet on database, create User with current mobile and name and write it on game
                 player_id = request.form.get('player_id'+str(i))  
                 if  (player_id != '0' and player_id != ' ') and matchID>0:
                     mp.idPlayer = player_id

@@ -91,6 +91,17 @@
           {% endif %}
           
         </li>
+        <li>
+          {% if user.is_authenticated %}
+          {% if user.user_type=='User' %}  
+          {% else %}
+          <a href="/nonStop">
+            <i class="zmdi zmdi-collection-plus"></i> <span>Create Non-Stop</span>
+          </a>
+          {% endif %}
+          {% else %}
+          {% endif %}
+        </li>
 
         <!-- <li>
           <a href="icons.html">

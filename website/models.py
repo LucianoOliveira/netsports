@@ -69,3 +69,23 @@ class MatchPlayer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     idMatch = db.Column(db.Integer, db.ForeignKey('match.id'))
     idPlayer = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class NonStop(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_NonStop = db.Column(db.DateTime(timezone=True))
+    nonStop_duration = db.Column(db.Integer)
+    nonStop_warmUp = db.Column(db.Integer)
+    nonStop_halftime = db.Column(db.Integer)
+    nonStop_type = db.Column(db.String(100))
+    num_player_total = db.Column(db.Integer)
+    num_player_enrolled = db.Column(db.Integer)
+    nonStop_status = db.Column(db.Integer) #0:Cancelled 1:Announced 2:AcceptingPlayers 3:Full 4:BeingPlayed 5:Ended    
+    namePlayerA1 = db.Column(db.String(100))
+    namePlayerA2 = db.Column(db.String(100))
+    namePlayerB1 = db.Column(db.String(100))
+    namePlayerB2 = db.Column(db.String(100))
+    namePlayerC1 = db.Column(db.String(100))
+    namePlayerC2 = db.Column(db.String(100))
+    namePlayerD1 = db.Column(db.String(100))
+    namePlayerD2 = db.Column(db.String(100))

@@ -5,46 +5,7 @@
 
 <div class="row">
 <div class="col-12 col-lg-12">
-    <div class="card">
-    <div class="card-header">Match Detail
-        <div class="card-action">
-        <div class="dropdown">
-            <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
-            <i class="icon-options"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="{{ url_for('views.match_detail', matchID=match.id) }}">Delete Match</a>
-            </div>
-        </div>
-        </div>
-        <div class="table-responsive">
-        <table class="table align-items-center table-flush table-borderless">
-            <thead>
-            <tr>
-            <th>Date Time</th>
-            <th>Players</th>
-            <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for match in currentCourt.matches %}
-            <tr>
-                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.date_match }}</td>
-                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match.num_player_enrolled }} / {{ match.num_player_total }}</td>                                      
-                <td onclick="window.location.href='{{ url_for('views.match_detail', matchID=match) }}';">{{ match_status }}</td>  
-                <td>
-                    <button type="button" class="close" onClick="deleteMatch({{ match.id }}, {{ currentCourt.id }})">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </td>                    
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        </div>  
-    </div>
-    </div>
-
+    
     <div class="card">
     <div class="card-header">Players in Match
         <div class="card-action">
@@ -91,9 +52,8 @@
                                     placeholder="Player Contact">
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-1">
                             <div class="form-group">
-                                <!-- <label for="form_email">Contact</label> -->
                                 <input 
                                     id="player_id{{ns.players}}" 
                                     type="hidden" 
@@ -102,15 +62,27 @@
                                     class="form-control" 
                                     readonly>
                             </div>
-                        </div>
-                        <!-- <div class="col-sm-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
-                                <label class="form-check-label" for="player_registered">
-                                Player Registered
-                                </label>
+                            <!-- Name from id -->
+                            <div class="form-group">
+                                <input 
+                                    id="p_id_nm{{ns.players}}" 
+                                    type="hidden" 
+                                    name="p_id_nm{{ns.players}}"
+                                    value = "{{ pr.first_name }}"  
+                                    class="form-control" 
+                                    readonly>
                             </div>
-                        </div> -->
+                            <!-- Mobile from id -->
+                            <div class="form-group">
+                                <input 
+                                    id="p_id_mb{{ns.players}}" 
+                                    type="hidden" 
+                                    name="p_id_mb{{ns.players}}"
+                                    value = "{{ pr.mobileNumber }}"  
+                                    class="form-control" 
+                                    readonly>
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     {% set ns.players = ns.players + 1 %}
@@ -139,20 +111,18 @@
                                 <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-1">
                             <div class="form-group">
                                 <!-- <label for="form_email">Contact</label> -->
                                 <input id="player_id{{i}}" type="hidden" name="player_id{{i}}" class="form-control" readonly>
                             </div>
-                        </div>
-                        <!-- <div class="col-sm-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
-                                <label class="form-check-label" for="player_registered">
-                                Player Registered
-                                </label>
+                            <div class="form-group">
+                                <input id="p_id_nm{{i}}" type="hidden" name="p_id_nm{{i}}" class="form-control" readonly>
                             </div>
-                        </div> -->
+                            <div class="form-group">
+                                <input id="p_id_mb{{i}}" type="hidden" name="p_id_mb{{i}}" class="form-control" readonly>
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     {%endfor%}
@@ -178,20 +148,18 @@
                             <input id="player_contact{{i}}" type="tel" name="player_contact{{i}}" class="form-control" placeholder="Player Contact">
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-1">
                         <div class="form-group">
                             <!-- <label for="form_email">Contact</label> -->
                             <input id="player_id{{i}}" type="hidden" name="player_id{{i}}" class="form-control" readonly>
                         </div>
-                    </div>
-                    <!-- <div class="col-sm-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="player_registered" name="player_registered">
-                            <label class="form-check-label" for="player_registered">
-                            Player Registered
-                            </label>
+                        <div class="form-group">
+                            <input id="p_id_nm{{i}}" type="hidden" name="p_id_nm{{i}}" class="form-control" readonly>
                         </div>
-                    </div> -->
+                        <div class="form-group">
+                            <input id="p_id_mb{{i}}" type="hidden" name="p_id_mb{{i}}" class="form-control" readonly>
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 {%endfor%} 
@@ -241,6 +209,7 @@
     function changePlayerName{{i}}() {
       var playerName = document.getElementById('player_name{{i}}').value
       mobilePhone = ''
+      nameFromID = ''
       playerID = 0
       if (playerName != '')
       {
@@ -248,11 +217,14 @@
             if (playerName.toLowerCase() == "{{element.name}}".toLowerCase()){
                 var mobilePhone = "{{element.contact}}";
                 var playerID = "{{element.id}}";
+                var nameFromID = "{{element.name}}";
             }    
         {% endfor %}
       }  
       document.getElementById('player_contact{{i}}').value = mobilePhone;
       document.getElementById('player_id{{i}}').value = playerID;
+      document.getElementById('p_id_nm{{i}}').value = nameFromID;
+      document.getElementById('p_id_mb{{i}}').value = mobilePhone;
     }
     changePlayerName{{i}}()
     {%endfor%}

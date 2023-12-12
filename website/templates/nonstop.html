@@ -1,0 +1,198 @@
+{% extends "base.html" %} {% block title %}Net Sports{% endblock %} 
+{% block content %}
+    <form method="POST">
+      <h3 align="center">Create Non Stop</h3>
+      <div class="form-group">
+        <label for="date_NonStop">NonStop Date</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="date_NonStop"
+          name="date_NonStop"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="nonStop_duration">NonStop Duration (Minutes)</label>
+        <input
+          type="number"
+          class="form-control"
+          id="nonStop_duration"
+          name="nonStop_duration"
+          placeholder="90"
+          value="90"
+          required
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="nonStop_warmUp">Warm Up Time (Minutes)</label>
+        <input
+          type="number"
+          class="form-control"
+          id="nonStop_warmUp"
+          name="nonStop_warmUp"
+          placeholder="5"
+          value="5"
+          required
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="nonStop_halftime">HalfTime Time (Minutes)</label>
+        <input
+          type="number"
+          class="form-control"
+          id="nonStop_halftime"
+          name="nonStop_halftime"
+          placeholder="5"
+          value="5"
+          required
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="nonStop_type">Type</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nonStop_type"
+          name="nonStop_type"
+          placeholder="Match or Non-Stop"
+          value="Non-Stop"
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="num_player_total">Total Number of Players</label>
+        <input
+          type="number"
+          class="form-control"
+          id="num_player_total"
+          name="num_player_total"
+          value="8"
+          readonly
+        />
+      </div>
+      <div class="form-group row">
+        <label class="col-lg-3 col-form-label form-control-label">NonStop Status</label>
+        <div class="col-lg-9">
+            <select id="nonStop_status" name="nonStop_status" class="form-control form-select">
+                <option value="0">Cancelled</option>
+                <option value="1">Announced</option>
+                <option value="2">Accepting Players</option>
+                <option value="3" selected>Full</option>
+                <option value="4">Being Played</option>
+                <option value="5">Ended</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="team_A">Equipa A</label>
+        <div class="form-group row">
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerA1"
+              name="namePlayerA1"
+              placeholder="Nome"
+              required
+            />
+          </div>
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerA2"
+              name="namePlayerA2"
+              placeholder="Nome"
+              required
+            />
+          </div>
+        </div>
+      </div>   
+      
+      <div class="form-group">
+        <label for="team_B">Equipa B</label>
+        <div class="form-group row">
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerB1"
+              name="namePlayerB1"
+              placeholder="Nome"
+              required
+            />
+          </div>
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerB2"
+              name="namePlayerB2"
+              placeholder="Nome"
+              required
+            />
+          </div>
+        </div>
+      </div> 
+      
+      <div class="form-group">
+        <label for="team_C">Equipa C</label>
+        <div class="form-group row">
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerC1"
+              name="namePlayerC1"
+              placeholder="Nome"
+              required
+            />
+          </div>
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerC2"
+              name="namePlayerC2"
+              placeholder="Nome"
+              required
+            />
+          </div>
+        </div>
+      </div> 
+
+      <div class="form-group">
+        <label for="team_D">Equipa D</label>
+        <div class="form-group row">
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerD1"
+              name="namePlayerD1"
+              placeholder="Nome"
+              required
+            />
+          </div>
+          <div class="col-lg-4">
+            <input
+              type="text"
+              class="form-control"
+              id="namePlayerD2"
+              name="namePlayerD2"
+              placeholder="Nome"
+              required
+            />
+          </div>
+        </div>
+      </div> 
+      
+      <br />
+      <button type="submit" class="btn btn-primary">Create Match</button>
+    </form>
+{% endblock %}
