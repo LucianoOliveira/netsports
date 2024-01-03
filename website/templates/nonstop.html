@@ -74,125 +74,397 @@
           readonly
         />
       </div>
-      <div class="form-group row">
-        <label class="col-lg-3 col-form-label form-control-label">NonStop Status</label>
-        <div class="col-lg-9">
-            <select id="nonStop_status" name="nonStop_status" class="form-control form-select">
-                <option value="0">Cancelled</option>
-                <option value="1">Announced</option>
-                <option value="2">Accepting Players</option>
-                <option value="3" selected>Full</option>
-                <option value="4">Being Played</option>
-                <option value="5">Ended</option>
-            </select>
+      <!-- Pane for status -->
+      <div class="col-lg-12">
+        <div class="card">
+        <div class="card-body">
+        <ul class="nav nav-tabs nav-tabs-primary top-icon nav-justified">
+            <li class="nav-item">
+                <a href="javascript:void();" data-target="#announced" data-toggle="pill" class="nav-link active"><i class="icon-user"></i> <span class="hidden-xs">Announced</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void();" data-target="#accepting" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">Accepting Players</span></a>
+            </li>
+            <li class="nav-item">
+              <a href="javascript:void();" data-target="#full" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">Full</span></a>
+          </li>
+        </ul>
+        <div class="tab-content p-3">
+            <!-- Announced -->
+            <div class="tab-pane active" id="announced">
+                <h5 class="mb-3">Announced NonStop</h5>
+                <form method="POST" enctype="multipart/form-data">
+                  <div class="form-group row">
+                      <label class="col-lg-3 col-form-label form-control-label">When Players Can Register</label>
+                      <div class="col-lg-6">
+                          <input
+                              type="datetime-local"
+                              class="form-control"
+                              id="date_RegistrationNonStop"
+                              name="date_RegistrationNonStop"
+                              required
+                          />
+                      </div>
+                  </div>
+                  <hr>
+                  <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">Pre-Registered Players</label>
+                    <div class="col-lg-9">
+                      <div class="form-group">
+                        <label for="team_A">Equipa A</label>
+                        <div class="form-group row">
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerA1"
+                              name="namePlayerA1"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerA2"
+                              name="namePlayerA2"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>   
+                      
+                      <div class="form-group">
+                        <label for="team_B">Equipa B</label>
+                        <div class="form-group row">
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerB1"
+                              name="namePlayerB1"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerB2"
+                              name="namePlayerB2"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div> 
+                      
+                      <div class="form-group">
+                        <label for="team_C">Equipa C</label>
+                        <div class="form-group row">
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerC1"
+                              name="namePlayerC1"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerC2"
+                              name="namePlayerC2"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div> 
+                
+                      <div class="form-group">
+                        <label for="team_D">Equipa D</label>
+                        <div class="form-group row">
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerD1"
+                              name="namePlayerD1"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                          <div class="col-lg-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="namePlayerD2"
+                              name="namePlayerD2"
+                              placeholder="Nome"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div> 
+                    </div>
+                </div>
+              </form>
+            </div>
+            <!-- Accepting -->
+            <div class="tab-pane" id="accepting">
+              <h5 class="mb-3">Accepting Players</h5>
+              <form method="POST" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <label class="col-lg-3 col-form-label form-control-label">When Players Can Register</label>
+                    <div class="col-lg-6">
+                        <input
+                            type="datetime-local"
+                            class="form-control"
+                            id="date_AcceptingRegistrationNonStop"
+                            name="date_AcceptingRegistrationNonStop"
+                            value="{{ current_timestamp }}"
+                            required
+                        />
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Pre-Registered Players</label>
+                  <div class="col-lg-9">
+                    <div class="form-group">
+                      <label for="team_A">Equipa A</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerA1"
+                            name="namePlayerA1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerA2"
+                            name="namePlayerA2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>   
+                    
+                    <div class="form-group">
+                      <label for="team_B">Equipa B</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerB1"
+                            name="namePlayerB1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerB2"
+                            name="namePlayerB2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+                    
+                    <div class="form-group">
+                      <label for="team_C">Equipa C</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerC1"
+                            name="namePlayerC1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerC2"
+                            name="namePlayerC2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+              
+                    <div class="form-group">
+                      <label for="team_D">Equipa D</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerD1"
+                            name="namePlayerD1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerD2"
+                            name="namePlayerD2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+              </div>
+            </form>
+            </div>
+            <!-- Full -->
+            <div class="tab-pane" id="full">
+              <h5 class="mb-3">NonStop Full</h5>
+              <form method="POST" enctype="multipart/form-data">
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Registered Players</label>
+                  <div class="col-lg-9">
+                    <div class="form-group">
+                      <label for="team_A">Equipa A</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerA1"
+                            name="namePlayerA1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerA2"
+                            name="namePlayerA2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>   
+                    
+                    <div class="form-group">
+                      <label for="team_B">Equipa B</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerB1"
+                            name="namePlayerB1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerB2"
+                            name="namePlayerB2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+                    
+                    <div class="form-group">
+                      <label for="team_C">Equipa C</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerC1"
+                            name="namePlayerC1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerC2"
+                            name="namePlayerC2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+              
+                    <div class="form-group">
+                      <label for="team_D">Equipa D</label>
+                      <div class="form-group row">
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerD1"
+                            name="namePlayerD1"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="namePlayerD2"
+                            name="namePlayerD2"
+                            placeholder="Nome"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+    </div>
+    </div>
 
-      <div class="form-group">
-        <label for="team_A">Equipa A</label>
-        <div class="form-group row">
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerA1"
-              name="namePlayerA1"
-              placeholder="Nome"
-              required
-            />
-          </div>
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerA2"
-              name="namePlayerA2"
-              placeholder="Nome"
-              required
-            />
-          </div>
-        </div>
-      </div>   
-      
-      <div class="form-group">
-        <label for="team_B">Equipa B</label>
-        <div class="form-group row">
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerB1"
-              name="namePlayerB1"
-              placeholder="Nome"
-              required
-            />
-          </div>
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerB2"
-              name="namePlayerB2"
-              placeholder="Nome"
-              required
-            />
-          </div>
-        </div>
-      </div> 
-      
-      <div class="form-group">
-        <label for="team_C">Equipa C</label>
-        <div class="form-group row">
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerC1"
-              name="namePlayerC1"
-              placeholder="Nome"
-              required
-            />
-          </div>
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerC2"
-              name="namePlayerC2"
-              placeholder="Nome"
-              required
-            />
-          </div>
-        </div>
-      </div> 
-
-      <div class="form-group">
-        <label for="team_D">Equipa D</label>
-        <div class="form-group row">
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerD1"
-              name="namePlayerD1"
-              placeholder="Nome"
-              required
-            />
-          </div>
-          <div class="col-lg-4">
-            <input
-              type="text"
-              class="form-control"
-              id="namePlayerD2"
-              name="namePlayerD2"
-              placeholder="Nome"
-              required
-            />
-          </div>
-        </div>
-      </div> 
       
       <br />
-      <button type="submit" class="btn btn-primary">Create Match</button>
+      <button type="submit" class="btn btn-primary">Create NonStop</button>
     </form>
 {% endblock %}
