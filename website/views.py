@@ -108,7 +108,7 @@ def nonStop():
     
     current_timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M')  # Get current timestamp
     currentClub = Club.query.filter_by(email=current_user.email).first()
-    return render_template("nonStop.html", club=currentClub, user=current_user, current_timestamp=current_timestamp)    
+    return render_template("nonstop.html", club=currentClub, user=current_user, current_timestamp=current_timestamp)    
 
 @views.route('/create_court', methods=['GET', 'POST'])
 @login_required
