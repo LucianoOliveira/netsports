@@ -74,6 +74,17 @@ def nonStop():
         num_player_total = request.form.get('num_player_total') 
         num_player_enrolled = num_player_total 
         nonStop_status = request.form.get('nonStop_status') 
+        # get type of action (announced, accepting, full)
+        action = request.form['action']
+
+        # if action == 'announced':
+        #     # result = full_name + 'abc'
+        # elif action == 'accepting':
+        #     result = full_name + 'xyz'
+        # elif action == 'full':
+        #     result = full_name + '123'
+        # else:
+        #     result = "Unknown action"
 
         namePlayerA1 = request.form.get('namePlayerA1') 
         namePlayerA2 = request.form.get('namePlayerA2') 
