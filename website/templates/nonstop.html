@@ -69,7 +69,7 @@
           </select>
           <div id="courts-container">
               {% for court in courts %}
-              <div class="Court" data-id="{{ court.id }}" {% if loop.index > 2 %}style="opacity: 0.5; pointer-events: none;" {% endif %}>
+              <div class="Court" data-id="{{ court.id }}"> {% if loop.index > 2 %}style="opacity: 0.5; pointer-events: none;" {% endif %}
                   <img src="{{ url_for('views.display_court_image', courtID=court.id ) }}" class="rounded-circle" width="100" height="100" object-fit="cover" alt="product img">
                   <p>{{ court.court_name }}</p>
                   <input type="hidden" name="selected-courts" value="{{ court.id }}">
