@@ -1,37 +1,41 @@
 // Function to handle court selection
 function addCourtEventListeners(selectedValue) {
     const courtElements = document.querySelectorAll('.Court');
+    
     courtElements.forEach(court => {
         court.addEventListener('click', function() {
             const selectedCourts = document.querySelectorAll('.selectedCourt');
-            if (selectedCourts.length < selectedValue || court.classList.contains('selectedCourt')) {
+            const isAlreadySelected = court.classList.contains('selectedCourt');
+            
+            if ((selectedCourts.length < selectedValue || isAlreadySelected) && !isCourtDisabled(court)) {
                 court.classList.toggle('selectedCourt');
             }
         });
     });
 }
 
+// Function to check if the court is disabled
+function isCourtDisabled(court) {
+    return court.style.pointerEvents === 'none' || court.style.opacity === '0.5';
+}
+
 // Show courts on page load with default value
 document.addEventListener('DOMContentLoaded', function() {
     const defaultSelectedValue = parseInt(document.getElementById('court-number').value);
     addCourtEventListeners(defaultSelectedValue);
+    updateCourtDisplay(defaultSelectedValue);
 
     // Change event for dropdown
     document.getElementById('court-number').addEventListener('change', function() {
         const selectedValue = parseInt(this.value);
-        const courtElements = document.querySelectorAll('.Court');
-        const availableCourts = document.querySelectorAll('.Court:not([style*="opacity: 0.5"])');
-        
-        courtElements.forEach((court, index) => {
-            if (index < availableCourts.length) {
-                court.classList.remove('selectedCourt');
-            } else {
-                court.classList.remove('selectedCourt');
-                court.style.pointerEvents = selectedValue > availableCourts.length ? 'none' : 'auto';
-                court.style.opacity = selectedValue > availableCourts.length ? '0.5' : '1';
-            }
+
+        // Clear all selected courts
+        const selectedCourts = document.querySelectorAll('.selectedCourt');
+        selectedCourts.forEach(selectedCourt => {
+            selectedCourt.classList.remove('selectedCourt');
         });
 
+        updateCourtDisplay(selectedValue);
         addCourtEventListeners(selectedValue);
     });
 
@@ -62,3 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Function to update court display based on selected value
+function updateCourtDisplay(selectedValue) {
+    const courtElements = document.querySelectorAll('.Court');
+    courtElements.forEach((court, index) => {
+        if (index < selectedValue) {
+            court.classList.remove('selectedCourt');
+        } else {
+            court.classList.remove('selectedCourt');
+            court.style.pointerEvents = selectedValue >= index + 1 ? 'none' : 'auto';
+            court.style.opacity = selectedValue >= index + 1 ? '0.5' : '1';
+        }
+    });
+}
