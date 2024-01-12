@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Flask
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
 from .models import Note, User, Court, Club, Match, MatchPlayer, NonStop
 from . import db
@@ -64,27 +65,32 @@ def club():
 @views.route('/nonStop', methods=['GET', 'POST'])
 @login_required
 def nonStop():
+    club = Club.query.filter_by(email=current_user.email).first()
+    user_type = 'Club'
+    courts = Court.query.filter(Court.club_id==club.id).all()
+    courts_count = len(courts)
     if request.method == 'POST': 
         date_NonStop = datetime.strptime( request.form.get('date_NonStop'), '%Y-%m-%dT%H:%M') 
+        date_Accepting = datetime.strptime( request.form.get('date_RegistrationNonStop'), '%Y-%m-%dT%H:%M') 
         nonStop_duration = request.form.get('nonStop_duration') 
         nonStop_warmUp = request.form.get('nonStop_warmUp') 
         nonStop_halftime = request.form.get('nonStop_halftime') 
         nonStop_type = request.form.get('nonStop_type') 
-        court_id = courtID
         num_player_total = request.form.get('num_player_total') 
         num_player_enrolled = num_player_total 
-        nonStop_status = request.form.get('nonStop_status') 
+        
         # get type of action (announced, accepting, full)
         action = request.form['action']
 
-        # if action == 'announced':
-        #     # result = full_name + 'abc'
-        # elif action == 'accepting':
-        #     result = full_name + 'xyz'
-        # elif action == 'full':
-        #     result = full_name + '123'
-        # else:
-        #     result = "Unknown action"
+        if action == 'announced':
+            nonStop_status = 1
+        elif action == 'accepting':
+            nonStop_status = 2
+        elif action == 'full':
+            nonStop_status = 3
+        else:
+            nonStop_status = 0
+        # nonStop_status = request.form.get('nonStop_status') 
 
         namePlayerA1 = request.form.get('namePlayerA1') 
         namePlayerA2 = request.form.get('namePlayerA2') 
@@ -119,7 +125,7 @@ def nonStop():
     
     current_timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M')  # Get current timestamp
     currentClub = Club.query.filter_by(email=current_user.email).first()
-    return render_template("nonstop.html", club=currentClub, user=current_user, current_timestamp=current_timestamp)    
+    return render_template("nonstop.html", club=currentClub, user=current_user, current_timestamp=current_timestamp, courts=courts, courts_count=courts_count)    
 
 @views.route('/create_court', methods=['GET', 'POST'])
 @login_required

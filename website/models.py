@@ -74,6 +74,7 @@ class MatchPlayer(db.Model):
 class NonStop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_NonStop = db.Column(db.DateTime(timezone=True))
+    date_Accepting = db.Column(db.DateTime(timezone=True))
     nonStop_duration = db.Column(db.Integer)
     nonStop_warmUp = db.Column(db.Integer)
     nonStop_halftime = db.Column(db.Integer)
