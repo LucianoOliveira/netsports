@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update court display
         updateCourtDisplay(selectedValue);
+
+        // Update nonStop_duration dropdown based on court-number
+        updateNonStopDurationDropdown(selectedValue);
     });
 
     // Event listener for court cards
@@ -42,7 +45,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+// Event listener for nonStop_duration dropdown
+    document.getElementById('nonStop_duration').addEventListener('change', function () {
+        const selectedValue = parseInt(this.value);
+        const courtNumber = parseInt(document.getElementById('court-number').value);
+
+        // Allow changing the value only if court-number is 2 or 3
+        if (courtNumber === 2 || courtNumber === 3) {
+            // Set default values 90 or 120 for court-number 2 or 3
+            if (selectedValue !== 90 && selectedValue !== 120) {
+                this.value = 90;
+            }
+        } else {
+            // Set default value 120 for court-number 4 and disable changing
+            this.value = 120;
+        }
+    });
 });
+
 
 // Function to update court display based on selected value
 function updateCourtDisplay(selectedValue) {
@@ -77,4 +98,20 @@ function updateSelectedCountLabel() {
 function updateTotalPlayers(selectedValue) {
     const numPlayerTotal = document.getElementById('num_player_total');
     numPlayerTotal.value = selectedValue * 4;
+}
+
+
+// Function to update nonStop_duration dropdown based on court-number
+function updateNonStopDurationDropdown(courtNumber) {
+    const nonStopDurationDropdown = document.getElementById('nonStop_duration');
+
+    // Set default values 90 or 120 for court-number 2 or 3
+    // Set default value 120 and disable changing for court-number 4
+    if (courtNumber === 2 || courtNumber === 3) {
+        nonStopDurationDropdown.value = 90;
+        nonStopDurationDropdown.removeAttribute('disabled');
+    } else {
+        nonStopDurationDropdown.value = 120;
+        nonStopDurationDropdown.setAttribute('disabled', 'disabled');
+    }
 }
