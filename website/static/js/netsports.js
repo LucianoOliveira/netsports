@@ -5,7 +5,73 @@ document.addEventListener('DOMContentLoaded', function () {
         dateFormat: "Y-m-d H:i",
         time_24hr: true,
         minuteIncrement: 15,
-        onChange: function (selectedDates, dateStr, instance) {
+        onChange: function(selectedDates, dateStr, instance) {
+            // Check if the selected date is not empty
+            if (selectedDates.length > 0) {
+                // Get selected date and time
+                const dateStart = new Date(selectedDates[0]);
+                const dateEnd = new Date(dateStart.getTime() + 120 * 60000); // 120 minutes in milliseconds
+
+                // Send an AJAX request to check for matches and update court visibility
+                $.ajax({
+                    type: 'POST',
+                    url: '/checkMatches',
+                    data: {
+                        dateStart: dateStart.toISOString(),
+                        dateEnd: dateEnd.toISOString()
+                    },
+                    success: function(response) {
+                        // Update the court visibility based on the response
+                        updateCourtVisibility(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // Additional code for your existing Flatpickr onChange logic
+            const formContainer = document.getElementById('form-container');
+            if (selectedDates.length > 0) {
+                formContainer.style.display = 'block';
+            } else {
+                formContainer.style.display = 'none';
+            }
+        }
+    });
+
+    // Initialize Flatpickr
+    flatpickr("#date_SignUP", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        minuteIncrement: 15,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Check if the selected date is not empty
+            if (selectedDates.length > 0) {
+                // Get selected date and time
+                const dateStart = new Date(selectedDates[0]);
+                const dateEnd = new Date(dateStart.getTime() + 120 * 60000); // 120 minutes in milliseconds
+
+                // Send an AJAX request to check for matches and update court visibility
+                $.ajax({
+                    type: 'POST',
+                    url: '/checkMatches',
+                    data: {
+                        dateStart: dateStart.toISOString(),
+                        dateEnd: dateEnd.toISOString()
+                    },
+                    success: function(response) {
+                        // Update the court visibility based on the response
+                        updateCourtVisibility(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // Additional code for your existing Flatpickr onChange logic
             const formContainer = document.getElementById('form-container');
             if (selectedDates.length > 0) {
                 formContainer.style.display = 'block';
@@ -115,3 +181,4 @@ function updateNonStopDurationDropdown(courtNumber) {
         nonStopDurationDropdown.setAttribute('disabled', 'disabled');
     }
 }
+

@@ -5,6 +5,8 @@ from .models import Note, User, Court, Club, Match, MatchPlayer, NonStop
 from . import db
 import json, os
 from datetime import datetime, date, timedelta
+from sqlalchemy import and_, func, cast, String
+
 
 views =  Blueprint('views', __name__)
 
@@ -70,8 +72,8 @@ def nonStop():
     courts = Court.query.filter(Court.club_id==club.id).all()
     courts_count = len(courts)
     if request.method == 'POST': 
-        date_NonStop = datetime.strptime( request.form.get('date_NonStop'), '%Y-%m-%dT%H:%M') 
-        date_Accepting = datetime.strptime( request.form.get('date_RegistrationNonStop'), '%Y-%m-%dT%H:%M') 
+        date_NonStop = datetime.strptime(request.form.get('date_NonStop'), '%Y-%m-%d %H:%M')
+        date_Accepting = datetime.strptime( request.form.get('date_SignUP'), '%Y-%m-%d %H:%M') 
         nonStop_duration = request.form.get('nonStop_duration') 
         nonStop_warmUp = request.form.get('nonStop_warmUp') 
         nonStop_halftime = request.form.get('nonStop_halftime') 
@@ -126,6 +128,33 @@ def nonStop():
     current_timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M')  # Get current timestamp
     currentClub = Club.query.filter_by(email=current_user.email).first()
     return render_template("nonstop.html", club=currentClub, user=current_user, current_timestamp=current_timestamp, courts=courts, courts_count=courts_count)    
+
+@views.route('/checkMatches', methods=['POST'])
+@login_required
+def check_matches():
+    date_start = datetime.strptime(request.form['dateStart'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    date_end = datetime.strptime(request.form['dateEnd'], '%Y-%m-%dT%H:%M:%S.%fZ')
+
+    # Query matches that overlap with the selected time frame
+    # print("Hello World! " + str(date_start))
+
+    overlapping_matches = (
+        Match.query
+        .filter(
+            and_(
+                Match.date_match <= date_end,
+                func.julianday(Match.date_match) + (Match.match_duration / (24.0 * 60.0)) >= func.julianday(date_start)
+            )
+        )
+        .all()
+    )
+
+    
+    # Get a list of court IDs with overlapping matches
+    hidden_courts = [match.court_id for match in overlapping_matches]
+    print(hidden_courts)
+
+    return jsonify({'hiddenCourts': hidden_courts})
 
 @views.route('/create_court', methods=['GET', 'POST'])
 @login_required

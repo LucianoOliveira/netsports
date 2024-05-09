@@ -13,3 +13,6 @@
 .selectedCourt {
     border-color: blue;
 }
+.hiddenCourt {
+    border-color: green;
+}

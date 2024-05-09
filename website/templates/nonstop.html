@@ -63,6 +63,7 @@
             {% endfor %}
           </select>
           <label hidden id="selectedCountLabel">0 courts selected</label>
+          <label hidden id="hiddenCourts">0 courts hidden</label>
           <div id="courts-container" class="row">
               {% for court in courts %}
                   <div class="col-md-3 Court" data-id="{{ court.id }}">
@@ -76,6 +77,9 @@
               {% endfor %}
           </div>
         </div>
+
+        
+
 
         <div class="form-group">
           <label hidden for="num_player_total">Total Number of Players</label>
@@ -111,21 +115,36 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label form-control-label">When Players Can Register</label>
                             <div class="col-lg-6">
-                                <input
+                                <!-- <input
                                     type="datetime-local"
                                     class="form-control"
                                     id="date_RegistrationNonStop"
                                     name="date_RegistrationNonStop"
                                     required
-                                />
+                                /> -->
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  id="date_SignUP" 
+                                  name="date_SignUP" 
+                                  required/>
                             </div>
                         </div>
                         <hr>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Pre-Registered Players</label>
+                          <div class="col-lg-3">
+                            <select class="form-control" name="type_of_teams" id="type_of_teams">
+                                  <option value="1" selected>Manual</option>
+                                  <option value="2">By ELO Ranking</option>
+                                  <option value="3">By League Ranking</option>
+                                  <option value="4">Online Draw</option>
+                                  <option value="5">Presencial Draw</option>
+                            </select>
+                          </div>
                           <div class="col-lg-9">
                             <div class="form-group">
-                              <label for="team_A">Equipa A</label>
+                              <label for="team_A">Team A</label>
                               <div class="form-group row">
                                 <div class="col-lg-4">
                                   <input
@@ -149,7 +168,7 @@
                             </div>   
                             
                             <div class="form-group">
-                              <label for="team_B">Equipa B</label>
+                              <label for="team_B">Team B</label>
                               <div class="form-group row">
                                 <div class="col-lg-4">
                                   <input
@@ -173,7 +192,7 @@
                             </div> 
                             
                             <div class="form-group">
-                              <label for="team_C">Equipa C</label>
+                              <label for="team_C">Team C</label>
                               <div class="form-group row">
                                 <div class="col-lg-4">
                                   <input
@@ -197,7 +216,7 @@
                             </div> 
                       
                             <div class="form-group">
-                              <label for="team_D">Equipa D</label>
+                              <label for="team_D">Team D</label>
                               <div class="form-group row">
                                 <div class="col-lg-4">
                                   <input
@@ -244,10 +263,19 @@
                       </div>
                       <hr>
                       <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">PreRegistered Players</label>
+                        <label class="col-lg-3 col-form-label form-control-label">Pre-Registered Players</label>
+                        <div class="col-lg-3">
+                          <select class="form-control" name="type_of_teams" id="type_of_teams">
+                                <option value="1" selected>Manual</option>
+                                <option value="2">By ELO Ranking</option>
+                                <option value="3">By League Ranking</option>
+                                <option value="4">Online Draw</option>
+                                <option value="5">Presencial Draw</option>
+                          </select>
+                        </div>
                         <div class="col-lg-9">
                           <div class="form-group">
-                            <label for="team_A">Equipa A</label>
+                            <label for="team_A">Team A</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -271,7 +299,7 @@
                           </div>   
                           
                           <div class="form-group">
-                            <label for="team_B">Equipa B</label>
+                            <label for="team_B">Team B</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -295,7 +323,7 @@
                           </div> 
                           
                           <div class="form-group">
-                            <label for="team_C">Equipa C</label>
+                            <label for="team_C">Team C</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -319,7 +347,7 @@
                           </div> 
                     
                           <div class="form-group">
-                            <label for="team_D">Equipa D</label>
+                            <label for="team_D">Team D</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -353,9 +381,18 @@
                     <form method="POST" enctype="multipart/form-data">
                       <div class="form-group row">
                         <label class="col-lg-3 col-form-label form-control-label">Registered Players</label>
+                        <div class="col-lg-3">
+                          <select class="form-control" name="type_of_teams" id="type_of_teams">
+                                <option value="1" selected>Manual</option>
+                                <option value="2">By ELO Ranking</option>
+                                <option value="3">By League Ranking</option>
+                                <option value="4">Online Draw</option>
+                                <option value="5">Presencial Draw</option>
+                          </select>
+                        </div>
                         <div class="col-lg-9">
                           <div class="form-group">
-                            <label for="team_A">Equipa A</label>
+                            <label for="team_A">Team A</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -379,7 +416,7 @@
                           </div>   
                           
                           <div class="form-group">
-                            <label for="team_B">Equipa B</label>
+                            <label for="team_B">Team B</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -403,7 +440,7 @@
                           </div> 
                           
                           <div class="form-group">
-                            <label for="team_C">Equipa C</label>
+                            <label for="team_C">Team C</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
@@ -427,7 +464,7 @@
                           </div> 
                     
                           <div class="form-group">
-                            <label for="team_D">Equipa D</label>
+                            <label for="team_D">Team D</label>
                             <div class="form-group row">
                               <div class="col-lg-4">
                                 <input
